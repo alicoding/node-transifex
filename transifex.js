@@ -1,21 +1,8 @@
-const BASE_URL = "https://www.transifex.com/api/2/project/";
-const API_URL = "https://www.transifex.com/api/2/";
-
 var request = require("request"),
-    env = require("./config.js"),
+    expUrl = require("./url"),
     _ = require("lodash"),
-    authHeader = "Basic " + new Buffer(env.get("TRANSIFEX-AUTH")).toString("base64"),
-    projectUrl = BASE_URL + env.get("TRANSIFEX-PROJECT"),
+    authHeader = "Basic " + new Buffer(url:pass).toString("base64"),
     slugs = [];
-
-// API URLs for Transifex
-var languagesAPIUrl = projectUrl + "/languages/",
-    languageCodeUrl = BASE_URL + "/language/",
-    resourceAPIUrl = projectUrl + "/resources/",
-    projectResourceUrl = projectUrl + "/resource/",
-    projectDetailsAPIUrl = projectUrl + "/?details",
-    languageInfoURL = API_URL + "language/",
-    languageAPI = projectUrl + "/language/";
 
 // request the project details based on the url provided
 function projectRequest (url, callback) {
@@ -38,7 +25,7 @@ function projectDetails(callback) {
       projectObj = {},
       languagesInfo = [];
 
-  projectRequest(projectDetailsAPIUrl, function(err, projectData){
+  projectRequest(expUrl.projectDetailsAPIUrl, function(err, projectData){
     if (err) {
       return callback(err);
     }

@@ -9,6 +9,7 @@
   "author": "Ali Al Dallal <ali@alicoding.com>",
   "license": "MIT",
   "dependencies": {
+    "lodash": "2.2.1",
     "request": "2.27.0"
   }
 }
