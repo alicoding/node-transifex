@@ -4,13 +4,14 @@ var request = require("request"),
 var projectSlug,
     userAuth,
     expUrl,
-    authHeader;
+    authHeader,
+    slugs = [];
 
 function init(options) {
   projectSlug = options.project_slug || "webmaker";
   userAuth = options.credential || {};
   authHeader = "Basic " + new Buffer(userAuth).toString("base64");
-  expUrl = require("./url")(projectSlug);
+  expUrl = require("./url")(projectSlug).API;
 };
 
 // request the project details based on the url provided
@@ -30,8 +31,7 @@ function projectRequest (url, callback) {
 function projectDetails(callback) {
   var languages = [],
       projectObj = {},
-      languagesInfo = [],
-      slugs = [];
+      languagesInfo = [];
 
   projectRequest(expUrl.projectDetailsAPIUrl, function(err, projectData){
     if (err) {
@@ -48,7 +48,7 @@ function projectDetails(callback) {
     });
     var wait = languages.length;
     languages.forEach(function(language) {
-      var url = languageInfoURL + language + "/";
+      var url = expUrl.languageInfoURL + language + "/";
       projectRequest(url, function(err, data){
         if (err) {
           return callback(err);
@@ -82,7 +82,7 @@ function projectStats(callback) {
         finalDetails = {};
     data.slugs.forEach(function (slug) {
       var details = {},
-          url = projectResourceUrl + slug + "/stats/";
+          url = expUrl.projectResourceUrl + slug + "/stats/";
       projectRequest(url, function(err, projectData){
         if (err) {
           return callback(err);
@@ -111,7 +111,7 @@ function getNumberOfContributors( callback ) {
       numOfCoordinators = 0,
       totalNum = 0;
 
-  projectRequest(languagesAPIUrl, function(err, projectDetails){
+  projectRequest(expUrl.languagesAPIUrl, function(err, projectDetails){
     if (err) {
       return callback(err);
     }
@@ -156,7 +156,7 @@ function getAllLanguages(callback) {
 };
 
 function componentStats(component, callback) {
-  var url = projectResourceUrl + component + "/stats/";
+  var url = expUrl.projectResourceUrl + component + "/stats/";
   projectRequest(url, function(err, data){
     if (err) {
       return callback(err);
@@ -184,7 +184,7 @@ function getLangCompStats(component, lang, callback) {
     } else if (arrOfLocale.indexOf(lang) === -1) {
       return callback(Error("Error: Unknown locale's name"));
     }
-    var url = projectResourceUrl + component + "/stats/" + lang + "/";
+    var url = expUrl.projectResourceUrl + component + "/stats/" + lang + "/";
     projectRequest(url, function(err, langStat) {
       if (err) {
         return callback(err);
@@ -236,7 +236,7 @@ function projectLangDetails(locale, callback) {
     if (!findLocale(locale, data)) {
       return callback(Error("Error: Unknown locale's name"));
     }
-    var url = languageAPI + locale + "/?details"
+    var url = expUrl.languageAPI + locale + "/?details"
     projectRequest(url, function(err, langDetails) {
       if (err) {
         return callback(err);

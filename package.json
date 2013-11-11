@@ -1,10 +1,10 @@
 {
-  "name": "node-transifex-client",
+  "name": "node-transifex",
   "version": "0.0.1",
   "description": "NodeJS Transifex API Client",
   "repository": {
     "type": "git",
-    "url": "git://github.com/alicoding/node-transifex-client.git"
+    "url": "git://github.com/alicoding/node-transifex.git"
   },
   "author": "Ali Al Dallal <ali@alicoding.com>",
   "license": "MIT",
