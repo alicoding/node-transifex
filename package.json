@@ -1,7 +1,8 @@
 {
-  "name": "node-transifex",
+  "name": "transifex",
   "version": "0.0.2",
   "description": "NodeJS Transifex API Client",
+  "main": "./transifex.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/alicoding/node-transifex.git"
