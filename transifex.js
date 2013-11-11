@@ -1,7 +1,7 @@
 var request = require("request"),
     expUrl = require("./url"),
     _ = require("lodash"),
-    authHeader = "Basic " + new Buffer(url:pass).toString("base64"),
+    authHeader = "Basic " + new Buffer(user:password).toString("base64"),
     slugs = [];
 
 // request the project details based on the url provided
