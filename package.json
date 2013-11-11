@@ -1,6 +1,6 @@
 {
   "name": "transifex",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "NodeJS Transifex API Client",
   "main": "./transifex.js",
   "repository": {
