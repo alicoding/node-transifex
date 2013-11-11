@@ -81,7 +81,7 @@ Return the following **data**
 
 ### getAllLanguages
 
-The `getAllLanguages`
+The `getAllLanguages` function return all the languages in the project with the code and its name.
 
 ``` javascript
 transifex.getAllLanguages(function(error, data){
@@ -89,24 +89,85 @@ transifex.getAllLanguages(function(error, data){
 });
 ```
 
+Return the following ***data***
+
+```
+[ { locale: 'ar', name: 'Arabic' },
+  { locale: 'bn_IN', name: 'Bengali (India)' },
+  { locale: 'cs', name: 'Czech' },
+  { locale: 'el', name: 'Greek' },
+  { locale: 'de', name: 'German' },
+  { locale: 'en_GB', name: 'English (United Kingdom)' },
+  { locale: 'es', name: 'Spanish' },
+  { locale: 'eu', name: 'Basque' },
+  { locale: 'fa', name: 'Persian' },
+  { locale: 'fi', name: 'Finnish' },
+  { locale: 'fr', name: 'French' },
+  { locale: 'gl', name: 'Galician' },
+  ...
+  ...
+  ...
+  { locale: 'en@pirate', name: 'Pirate English' },
+  count: 59 ]
+```
+
 ### componentStats
 
-The `componentStats`
+The `componentStats` function return the status for all the language for the specific slug name.
 
 ``` javascript
-transifex.componentStats(function(error, data){
+transifex.componentStats("slug_name", function(error, data){
 	...
 });
 ```
 
+Return the following ***data***
+
+```
+  mr:
+   { reviewed_percentage: '0%',
+     completed: '59%',
+     untranslated_words: 84,
+     last_commiter: 'suraj.kawade',
+     reviewed: 0,
+     translated_entities: 13,
+     translated_words: 27,
+     last_update: '2013-10-21 19:58:53',
+     untranslated_entities: 9 },
+  pl_PL:
+   { reviewed_percentage: '0%',
+     completed: '59%',
+     untranslated_words: 62,
+     last_commiter: 'RLisak',
+     reviewed: 0,
+     translated_entities: 13,
+     translated_words: 49,
+     last_update: '2013-11-07 14:49:37',
+     untranslated_entities: 9 },
+```
+
 ### getLangCompStats
 
-The `getLangCompStats`
+The `getLangCompStats` function return the status for the given slug name and locale name.
 
 ``` javascript
-transifex.getLangCompStats(function(error, data){
+transifex.getLangCompStats("slug_name", "th_TH", function(error, data){
 	...
 });
+```
+
+Return the following ***data***
+
+```
+{ reviewed_percentage: '100%',
+  completed: '100%',
+  untranslated_words: 0,
+  last_commiter: 'aali',
+  reviewed: 22,
+  translated_entities: 22,
+  translated_words: 111,
+  last_update: '2013-10-18 19:20:19',
+  untranslated_entities: 0 }
 ```
 
 ### getLangStats
