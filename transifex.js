@@ -1,15 +1,22 @@
 var request = require("request"),
-    expUrl = require("./url"),
-    _ = require("lodash"),
-    authHeader = "Basic " + new Buffer(user:password).toString("base64"),
-    slugs = [];
+    _ = require("lodash");
+
+var projectSlug,
+    userAuth,
+    expUrl,
+    authHeader;
+
+function init(options) {
+  projectSlug = options.project_slug || "webmaker";
+  userAuth = options.credential || {};
+  authHeader = "Basic " + new Buffer(userAuth).toString("base64");
+  expUrl = require("./url")(projectSlug);
+};
 
 // request the project details based on the url provided
 function projectRequest (url, callback) {
-  request.get({
-    url: url,
-    headers: {"Authorization": authHeader}
-  }, function(error, response, body) {
+  request.get({ url: url, headers: { "Authorization": authHeader } },
+    function(error, response, body) {
     if (error) {
       return callback(error);
     }
@@ -23,7 +30,8 @@ function projectRequest (url, callback) {
 function projectDetails(callback) {
   var languages = [],
       projectObj = {},
-      languagesInfo = [];
+      languagesInfo = [],
+      slugs = [];
 
   projectRequest(expUrl.projectDetailsAPIUrl, function(err, projectData){
     if (err) {
