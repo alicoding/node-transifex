@@ -259,3 +259,4 @@ module.exports.componentStats = componentStats;
 module.exports.getLangCompStats = getLangCompStats;
 module.exports.getLangStats = getLangStats;
 module.exports.projectLangDetails = projectLangDetails;
+module.exports.init = init;
