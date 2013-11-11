@@ -1,4 +1,4 @@
-node-transifex-client
+node-transifex
 =====================
 
 Transifex API client for nodejs
@@ -172,20 +172,80 @@ Return the following ***data***
 
 ### getLangStats
 
-The `getLangStats`
+The `getLangStats` function return the overall status for the given locale
 
 ``` javascript
-transifex.getLangStats(function(error, data){
+transifex.getLangStats("es", function(error, data){
 	...
 });
 ```
 
+Return the following ***data***
+
+```
+{ webmaker:
+   { reviewed_percentage: '100%',
+     completed: '100%',
+     untranslated_words: 0,
+     last_commiter: 'aali',
+     reviewed: 472,
+     translated_entities: 472,
+     translated_words: 3859,
+     last_update: '2013-11-05 16:43:56',
+     untranslated_entities: 0 },
+  goggles:
+   { reviewed_percentage: '100%',
+     completed: '100%',
+     untranslated_words: 0,
+     last_commiter: 'aali',
+     reviewed: 729,
+     translated_entities: 729,
+     translated_words: 11043,
+     last_update: '2013-11-05 16:41:30',
+     untranslated_entities: 0 },
+  thimble:
+   { reviewed_percentage: '100%',
+     completed: '100%',
+     untranslated_words: 0,
+     last_commiter: 'aali',
+     reviewed: 194,
+     translated_entities: 194,
+     translated_words: 4035,
+     last_update: '2013-11-05 16:46:11',
+     untranslated_entities: 0 },
+     ...
+     ...
+     ...
+```
+
 ### projectLangDetails
 
-The `projectLangDetails`
+The `projectLangDetails` function return full details on the project for the given locale
 
 ``` javascript
-transifex.projectLangDetails(function(error, data){
+transifex.projectLangDetails("pt", function(error, data){
 	...
 });
+```
+
+Return the following ***data***
+
+```
+{ last_updated: '2013-11-05T16:46:11.852',
+  coordinators: [ 'aali' ],
+  reviewers: [ 'yokunzz' ],
+  total_segments: 1814,
+  untranslated_segments: 0,
+  translated_segments: 1814,
+  reviewed_segments: 1814,
+  translators:
+   [ 'jaideejung007',
+     'KEEP_DARK',
+	...
+	...
+	...
+     'PatiphanPinkeaw',
+     'splattr' ],
+  translated_words: 21085,
+  completed_percentage: 100 }
 ```
