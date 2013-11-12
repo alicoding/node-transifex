@@ -279,6 +279,7 @@ function projectSetMethods(options, callback) {
 };
 
 function projectInstanceMethods(project_slug, callback) {
+  project_slug = project_slug || projectSlug || "webmaker";
   var url = expUrl.projectInstanceAPI.replace("project_slug", project_slug);
   projectRequest(url, function(err, project) {
     if (err) {
@@ -295,6 +296,70 @@ function projectInstanceMethods(project_slug, callback) {
 
 /*
 * END PROJECT APIs
+*/
+
+
+/*
+* RESOURCE API
+*/
+
+function resourcesSetMethod(project_slug, callback) {
+  project_slug = project_slug || projectSlug || "webmaker";
+  var url = expUrl.projectResources.replace("project_slug", project_slug);
+  projectRequest(url, function(err, resources) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      resources = JSON.parse(resources);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, resources);
+  });
+};
+
+function resourcesInstanceMethods(project_slug, resource_slug, bool, callback) {
+  project_slug = project_slug || projectSlug || "webmaker";
+  resource_slug = resource_slug || projectSlug || "webmaker";
+  var url = expUrl.projectResource.replace("project_slug", project_slug)
+  .replace("resource_slug", resource_slug);
+  if (!bool) {
+    url = url.substr(0, url.lastIndexOf("/"))
+  }
+  projectRequest(url, function(err, resource) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      resource = JSON.parse(resource);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, resource);
+  });
+};
+
+function sourceLanguageMethods(project_slug, resource_slug, callback) {
+  project_slug = project_slug || projectSlug || "webmaker";
+  resource_slug = resource_slug || projectSlug || "webmaker";
+  var url = expUrl.projectResourceFile.replace("project_slug", project_slug)
+  .replace("resource_slug", resource_slug);
+  projectRequest(url, function(err, fileContent) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      fileContent = JSON.parse(fileContent);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, fileContent);
+  });
+};
+
+/*
+* END RESOURCE API
 */
 
 function getAllTXLanguages(callback) {
@@ -325,6 +390,12 @@ function languageNameFor(locale, callback) {
   });
 };
 
+module.exports.projectSetMethods = projectSetMethods;
+module.exports.projectInstanceMethods = projectInstanceMethods;
+module.exports.resourcesSetMethod = resourcesSetMethod;
+module.exports.resourcesInstanceMethods = resourcesInstanceMethods;
+module.exports.sourceLanguageMethods = sourceLanguageMethods;
+
 module.exports.numberOfContributors = getNumberOfContributors;
 module.exports.projectStats = projectStats;
 module.exports.getAllLanguages = getAllLanguages;
@@ -333,6 +404,5 @@ module.exports.getLangCompStats = getLangCompStats;
 module.exports.getLangStats = getLangStats;
 module.exports.projectLangDetails = projectLangDetails;
 module.exports.init = init;
-module.exports.projectSetMethods = projectSetMethods;
-module.exports.projectInstanceMethods = projectInstanceMethods;
+
 module.exports.getAllTXLanguages = getAllTXLanguages;

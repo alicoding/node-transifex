@@ -22,8 +22,134 @@ transifex.init({
 ## API
 The module exposes a number of useful functions, including:
 
+### Project API
 
-### getNumberOfContributors
+#### projectSetMethods
+
+The `getAllTXprojects` function returns a list of (slug, name, description, source_language_code) for all projects the user has access to in JSON format. This method supports pagination through the options start and end.
+
+``` javascript
+transifex.projectSetMethods(options, function(err, data) {
+  ...
+});
+```
+
+Return all the projects in Transifex
+
+or
+
+``` javascript
+transifex.projectSetMethods({ start: 1, end: 20 }, function(err, data) {
+  ...
+});
+```
+
+Return only the first 20 projects from the list.
+
+#### projectInstanceMethods
+
+The `getAllTXprojects` function returns the fields slug, name, description and source_language_code for the project of the specified slug in JSON format includes the above fields as well as the following ones:
+
+* long_description
+* homepage
+* feed
+* created
+* anyone_submit
+* bug_tracker
+* trans_instructions
+* a list of tags
+* outsource
+* auto_join
+* a list of the maintainers' username
+* the username of the owner of the project
+* a list of the resources of the project containing the fields slug and name.
+* a list of language codes for the teams created for the project.
+* fill_up_resources, a boolean to specify whether the system will fill up
+
+``` javascript
+transifex.projectInstanceMethods("transifex", function(err, data) {
+  ...
+});
+```
+
+### Resource API
+
+#### resourcesSetMethod
+
+The `resourcesSetMethod` function returns a JSON-encoded list with the fields slug, name, i18n_type, source_language_code and the category of the resources that belong to the specified project.
+
+``` javascript
+transifex.resourcesSetMethod("transifex", function(err, data) {
+  ...
+});
+```
+
+#### resourcesInstanceMethods
+
+The `resourcesInstanceMethods` function returns a JSON encoded string with the details for the resource. The default fields returned are the name, the slug, the i18n_type, the source_language of the resource, its priority and the category. If the boolean in third parameter set to `true`, then extra fields are returned:
+
+* created
+* available_languages
+* project_slug
+* wordcount
+* total_entities
+* accept_translations
+* last_update
+
+``` javascript
+resourcesInstanceMethods("webmaker", "slug_name", true, function(err, data) {
+  ...
+});
+```
+
+**Example**
+
+```
+...
+
+{
+    "slug": "txc"
+    "mimetype": "text/x-po",
+    "source_language_code": "en",
+    "wordcount": 6160,
+    "total_entities": 1017,
+    "last_update": "2011-12-05 19:59:55",
+    "available_languages": [
+        {
+            "code_aliases": " ",
+            "code": "sq",
+            "name": "Albanian"
+        },
+        ...
+    ],
+}
+```
+
+#### sourceLanguageMethods
+
+The `sourceLanguageMethods` function returns the translation in the source language of the resource.
+
+``` javascript
+sourceLanguageMethods("webmaker", "profile", function(err, data) {
+  ...
+});
+```
+
+**Example**
+
+```
+{ permissionHelp: 'Your browser will now ask you for permission to use your camera. This will usually be at the top of your window.',
+  photo: 'GIF',
+  poweredBy: 'Powered by <a href="http://www.webmaker.org" target="_blank">Webmaker</a>',
+  ...
+  ...
+  ...
+  Done: 'Done',
+  Likes: 'Likes',
+  login: 'Login' }
+```
+
+#### getNumberOfContributors
 
 The `getNumberOfContributors` function return number of contributors in an array of objects.
 
@@ -41,7 +167,7 @@ Return the following **data**
   { component: 'Coordinators', count: 80 } ]
 ```
 
-### projectStats
+#### projectStats
 
 The `projectStats` function return the status of the project in each ***slug*** in all the ***languages*** available.
 
@@ -79,7 +205,7 @@ Return the following **data**
         ...
 ```
 
-### getAllLanguages
+#### getAllLanguages
 
 The `getAllLanguages` function return all the languages in the project with the code and its name.
 
@@ -111,7 +237,7 @@ Return the following ***data***
   count: 59 ]
 ```
 
-### componentStats
+#### componentStats
 
 The `componentStats` function return the status for all the language for the specific slug name.
 
@@ -146,7 +272,7 @@ Return the following ***data***
      untranslated_entities: 9 },
 ```
 
-### getLangCompStats
+#### getLangCompStats
 
 The `getLangCompStats` function return the status for the given slug name and locale name.
 
@@ -170,7 +296,7 @@ Return the following ***data***
   untranslated_entities: 0 }
 ```
 
-### getLangStats
+#### getLangStats
 
 The `getLangStats` function return the overall status for the given locale
 
@@ -218,7 +344,7 @@ Return the following ***data***
      ...
 ```
 
-### projectLangDetails
+#### projectLangDetails
 
 The `projectLangDetails` function return full details on the project for the given locale
 
@@ -250,57 +376,7 @@ Return the following ***data***
   completed_percentage: 100 }
 ```
 
-## Project API
-
-### projectSetMethods
-
-The `getAllTXprojects` function returns a list of (slug, name, description, source_language_code) for all projects the user has access to in JSON format. This method supports pagination through the options start and end.
-
-``` javascript
-projectSetMethods(options, function(err, data) {
-  ...
-});
-```
-
-Return all the projects in Transifex
-
-or
-
-``` javascript
-projectSetMethods({ start: 1, end: 20 }, function(err, data) {
-  ...
-});
-```
-
-Return only the first 20 projects from the list.
-
-### projectInstanceMethods
-
-The `getAllTXprojects` function returns the fields slug, name, description and source_language_code for the project of the specified slug in JSON format includes the above fields as well as the following ones:
-
-* long_description
-* homepage
-* feed
-* created
-* anyone_submit
-* bug_tracker
-* trans_instructions
-* a list of tags
-* outsource
-* auto_join
-* a list of the maintainers' username
-* the username of the owner of the project
-* a list of the resources of the project containing the fields slug and name.
-* a list of language codes for the teams created for the project.
-* fill_up_resources, a boolean to specify whether the system will fill up
-
-``` javascript
-projectInstanceMethods("transifex", function(err, data) {
-  ...
-});
-```
-
-### getAllTXlanguages
+#### getAllTXlanguages
 
 The `getAllTXlanguages` function provides info regarding all languages supported by Transifex.
 
@@ -348,7 +424,7 @@ Return the following ***data***
     ...
 ```
 
-### languageNameFor
+#### languageNameFor
 
 The `languageNameFor` functions provides info regarding a specific language supported by Transifex.
 

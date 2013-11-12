@@ -6,6 +6,9 @@ module.exports = function ( projectName ) {
   var API = {
     projectInstanceAPI: BASEP_URL + "project_slug/?details",
     txProjects: BASE_URL + "projects/",
+    projectResources: BASEP_URL + "project_slug/resources/",
+    projectResource: BASEP_URL + "project_slug/resource/resource_slug/?details",
+    projectResourceFile: BASEP_URL + "project_slug/resource/resource_slug/content/?file",
     languageInfoURL: BASE_URL + "language/",
     allLanguages: BASE_URL + "languages/",
     languageCodeUrl: BASEP_URL + "language/",
