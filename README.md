@@ -1,7 +1,7 @@
 node-transifex
 =====================
 
-Transifex API client for nodejs
+[Transifex](http://www.transifex.com) API client for nodejs
 
 Install the node.js module using npm:
 
