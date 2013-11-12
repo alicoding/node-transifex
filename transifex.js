@@ -15,8 +15,15 @@ function init(options) {
 };
 
 // request the project details based on the url provided
-function projectRequest (url, callback) {
-  request.get({ url: url, headers: { "Authorization": authHeader } },
+function projectRequest(url, options, callback) {
+  // Allow calling with or without options.
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  } else {
+    callback = callback || function(){};
+  }
+  request.get({ url: url, qs: options, headers: { "Authorization": authHeader } },
     function(error, response, body) {
     if (error) {
       return callback(error);
@@ -104,7 +111,7 @@ function projectStats(callback) {
 };
 
 // return the number of contributors in each role and the total number
-function getNumberOfContributors( callback ) {
+function getNumberOfContributors(callback) {
   var contributorsDetails = [],
       numOfTranslators = 0,
       numOfReviewers = 0,
@@ -180,9 +187,9 @@ function getLangCompStats(component, lang, callback) {
       arrOfLocale.push(langCode.locale);
     });
     if (data.slugs.indexOf(component) === -1) {
-      return callback(Error("Error: Unknown component's name"));
+      return callback(Error("Unknown component's name"));
     } else if (arrOfLocale.indexOf(lang) === -1) {
-      return callback(Error("Error: Unknown locale's name"));
+      return callback(Error("Unknown locale's name"));
     }
     var url = expUrl.projectResourceUrl + component + "/stats/" + lang + "/";
     projectRequest(url, function(err, langStat) {
@@ -201,8 +208,9 @@ function getLangCompStats(component, lang, callback) {
 
 function findLocale(locale, data) {
   for (var i = 0; i < data.languages.length; i++) {
-    if (data.languages[i].locale === locale)
+    if (data.languages[i].locale === locale) {
       return true;
+    }
   }
   return false;
 }
@@ -213,7 +221,7 @@ function getLangStats(locale, callback) {
       return callback(error);
     }
     if (!findLocale(locale, data)) {
-      return callback(Error("Error: Unknown locale's name"));
+      return callback(Error("Unknown locale's name"));
     }
     projectStats(function(error, data) {
       var details = {};
@@ -234,7 +242,7 @@ function projectLangDetails(locale, callback) {
       return callback(error);
     }
     if (!findLocale(locale, data)) {
-      return callback(Error("Error: Unknown locale's name"));
+      return callback(Error("Unknown locale's name"));
     }
     var url = expUrl.languageAPI + locale + "/?details"
     projectRequest(url, function(err, langDetails) {
@@ -252,6 +260,71 @@ function projectLangDetails(locale, callback) {
   });
 };
 
+/*
+* PROJECT APIs
+*/
+
+function projectSetMethods(options, callback) {
+  projectRequest(expUrl.txProjects, options, function(err, projects) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      projects = JSON.parse(projects);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, projects);
+  });
+};
+
+function projectInstanceMethods(project_slug, callback) {
+  var url = expUrl.projectInstanceAPI.replace("project_slug", project_slug);
+  projectRequest(url, function(err, project) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      project = JSON.parse(project);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, project);
+  });
+};
+
+/*
+* END PROJECT APIs
+*/
+
+function getAllTXLanguages(callback) {
+  projectRequest(expUrl.allLanguages, function(err, languages) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      languages = JSON.parse(languages);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, languages);
+  });
+};
+
+function languageNameFor(locale, callback) {
+  projectRequest(expUrl.languageInfoURL + locale, function(err, language) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      language = JSON.parse(language);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, language);
+  });
+};
+
 module.exports.numberOfContributors = getNumberOfContributors;
 module.exports.projectStats = projectStats;
 module.exports.getAllLanguages = getAllLanguages;
@@ -260,3 +333,6 @@ module.exports.getLangCompStats = getLangCompStats;
 module.exports.getLangStats = getLangStats;
 module.exports.projectLangDetails = projectLangDetails;
 module.exports.init = init;
+module.exports.projectSetMethods = projectSetMethods;
+module.exports.projectInstanceMethods = projectInstanceMethods;
+module.exports.getAllTXLanguages = getAllTXLanguages;

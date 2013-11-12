@@ -25,7 +25,7 @@ The module exposes a number of useful functions, including:
 
 ### getNumberOfContributors
 
-The `getNumberOfContributors` function return number of contributors in an array of objects. 
+The `getNumberOfContributors` function return number of contributors in an array of objects.
 
 ``` javascript
 transifex.getNumberOfContributors(function(error, data){
@@ -248,4 +248,118 @@ Return the following ***data***
      'splattr' ],
   translated_words: 21085,
   completed_percentage: 100 }
+```
+
+## Project API
+
+### projectSetMethods
+
+The `getAllTXprojects` function returns a list of (slug, name, description, source_language_code) for all projects the user has access to in JSON format. This method supports pagination through the options start and end.
+
+``` javascript
+projectSetMethods(options, function(err, data) {
+  ...
+});
+```
+
+Return all the projects in Transifex
+
+or
+
+``` javascript
+projectSetMethods({ start: 1, end: 20 }, function(err, data) {
+  ...
+});
+```
+
+Return only the first 20 projects from the list.
+
+### projectInstanceMethods
+
+The `getAllTXprojects` function returns the fields slug, name, description and source_language_code for the project of the specified slug in JSON format includes the above fields as well as the following ones:
+
+* long_description
+* homepage
+* feed
+* created
+* anyone_submit
+* bug_tracker
+* trans_instructions
+* a list of tags
+* outsource
+* auto_join
+* a list of the maintainers' username
+* the username of the owner of the project
+* a list of the resources of the project containing the fields slug and name.
+* a list of language codes for the teams created for the project.
+* fill_up_resources, a boolean to specify whether the system will fill up
+
+``` javascript
+projectInstanceMethods("transifex", function(err, data) {
+  ...
+});
+```
+
+### getAllTXlanguages
+
+The `getAllTXlanguages` function provides info regarding all languages supported by Transifex.
+
+``` javascript
+getAllTXLanguages(function(err, data) {
+  ...
+});
+```
+Return the following ***data***
+
+
+```
+  ...
+  ...
+  { pluralequation: '(n > 1)',
+    code: 'wa',
+    name: 'Walloon',
+    nplurals: 2 },
+  { pluralequation: '(n != 1)',
+    code: 'war',
+    name: 'Wáray-Wáray',
+    nplurals: 2 },
+  { pluralequation: '(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3',
+    code: 'cy',
+    name: 'Welsh',
+    nplurals: 4 },
+  { pluralequation: '(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3',
+    code: 'cy_GB',
+    name: 'Welsh (United Kingdom)',
+    nplurals: 4 },
+  { pluralequation: '(n != 1)',
+    code: 'fy',
+    name: 'Western Frisian',
+    nplurals: 2 },
+  { pluralequation: '(n != 1)',
+    code: 'fy_NL',
+    name: 'Western Frisian (Netherlands)',
+    nplurals: 2 },
+  { pluralequation: '0', code: 'wo', name: 'Wolof', nplurals: 1 },
+  { pluralequation: '0',
+    code: 'wo_SN',
+    name: 'Wolof (Senegal)',
+    nplurals: 1 },
+    ...
+    ...
+```
+
+### languageNameFor
+
+The `languageNameFor` functions provides info regarding a specific language supported by Transifex.
+
+``` javascript
+transifex.languageNameFor("th", function(err, data) {
+  ...
+});
+```
+
+Return the following ***data***
+
+```
+{ pluralequation: '0', code: 'th', name: 'Thai', nplurals: 1 }
 ```

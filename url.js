@@ -4,8 +4,11 @@ module.exports = function ( projectName ) {
   const projectUrl = BASEP_URL + projectName + "/";
 
   var API = {
-    languageCodeUrl: BASEP_URL + "language/",
+    projectInstanceAPI: BASEP_URL + "project_slug/?details",
+    txProjects: BASE_URL + "projects/",
     languageInfoURL: BASE_URL + "language/",
+    allLanguages: BASE_URL + "languages/",
+    languageCodeUrl: BASEP_URL + "language/",
     languagesAPIUrl: projectUrl + "languages/",
     resourceAPIUrl: projectUrl + "resources/",
     projectResourceUrl: projectUrl + "resource/",
