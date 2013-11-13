@@ -311,6 +311,57 @@ transifex.statisticsMethods("webmaker", "profile", "zh_CN", function(err, data) 
 }
 ```
 
+#### languageStatisticsMethods
+
+The `languageStatisticsMethods` function returns the statistics for all the resouce_slug for the specified language_code. The specific data returned per language are:
+
+* completed: the percentage of the resource that has been translated for the language.
+* translated_entities: the number of entities that have been translated for the language.
+* untranslated_entities: the number of entities that have not been translated for the language.
+* translated_words: the number of words that have been translated for the language.
+* untranslated_words: the number of words that have not been translated for the language.
+* last_update: the date and time that the last update for this translation took place.
+* last_committer: the username of the last user to have updated the translation for the language.
+* reviewed: the number of entities which have been reviewed for the language.
+* reviewed_percentage: the percentage of entities that have been reviewed for the language.
+
+``` javascript
+languageStatisticsMethods("es", function(err, data) {
+  ...
+});
+```
+
+**Example**
+```
+{
+  "popcorn": {
+    "reviewed_percentage": "0%",
+    "completed": "6%",
+    "untranslated_words": 1040,
+    "last_commiter": "aali",
+    "reviewed": 0,
+    "translated_entities": 16,
+    "translated_words": 18,
+    "last_update": "2013-11-05 16:27:54",
+    "untranslated_entities": 248
+  },
+...
+...
+...
+  "weblit": {
+    "reviewed_percentage": "0%",
+    "completed": "18%",
+    "untranslated_words": 810,
+    "last_commiter": "hasany81",
+    "reviewed": 0,
+    "translated_entities": 20,
+    "translated_words": 64,
+    "last_update": "2013-10-17 10:46:28",
+    "untranslated_entities": 88
+  }
+}
+```
+
 ### Language Info API
 
 #### languageInstanceMethods

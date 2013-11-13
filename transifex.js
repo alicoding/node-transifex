@@ -136,32 +136,22 @@ function getAllLanguages(callback) {
   });
 };
 
-function findLocale(locale, data) {
-  for (var i = 0; i < data.languages.length; i++) {
-    if (data.languages[i].locale === locale) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function getLangStats(locale, callback) {
-  projectDetails(function(error, data) {
+function languageStatisticsMethods(locale, callback) {
+  resourcesSetMethod(projectSlug, function(error, projectData) {
     if (error) {
       return callback(error);
     }
-    if (!findLocale(locale, data)) {
-      return callback(Error("Unknown locale's name"));
-    }
-    projectStats(function(error, data) {
-      var details = {};
-      if (error) {
-        return callback(error);
-      }
-      Object.keys(data).forEach(function(resource) {
-        details[resource] = data[resource][locale];
+    var details = {},
+    wait = projectData.length;
+
+    _.findKey(projectData, function(resource) {
+      statisticsMethods(projectSlug, resource.slug, locale, function(err, data) {
+        details[resource.slug] = data;
+        wait--;
+        if ( wait === 0 ) {
+          callback(null, details);
+        }
       });
-      callback(null, details);
     });
   });
 };
@@ -470,8 +460,8 @@ module.exports.translationInstanceMethod = translationInstanceMethod;
 module.exports.statisticsMethods = statisticsMethods;
 module.exports.languageInstanceMethods = languageInstanceMethods;
 module.exports.languageSetMethods = languageSetMethods;
+module.exports.languageStatisticsMethods = languageStatisticsMethods;
 
 module.exports.numberOfContributors = getNumberOfContributors;
 module.exports.projectStats = projectStats;
 module.exports.getAllLanguages = getAllLanguages;
-module.exports.getLangStats = getLangStats;
