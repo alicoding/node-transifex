@@ -41,14 +41,9 @@ function projectDetails(callback) {
       projectObj = {},
       languagesInfo = [];
 
-  projectRequest(expUrl.projectDetailsAPIUrl, function(err, projectData){
+  projectInstanceMethods(projectSlug, function(err, projectData){
     if (err) {
       return callback(err);
-    }
-    try {
-      projectData = JSON.parse(projectData);
-    } catch (e) {
-      return callback(e);
     }
     languages = projectData.teams;
     projectData.resources.forEach(function(data) {
@@ -56,25 +51,19 @@ function projectDetails(callback) {
     });
     var wait = languages.length;
     languages.forEach(function(language) {
-      var url = expUrl.languageInfoURL + language + "/";
-      projectRequest(url, function(err, data){
+      languageInstanceMethods(language, function(err, data) {
         if (err) {
           return callback(err);
         }
-        try {
-          data = JSON.parse(data);
-          languagesInfo.push({
-            locale: data.code,
-            name: data.name
-          });
-        } catch (e) {
-          return callback(e);
-        }
+        languagesInfo.push({
+          locale: data.code,
+          name: data.name
+        });
         wait--;
         if (wait === 0) {
           projectObj.languages = languagesInfo;
           projectObj.slugs = slugs;
-          callback(null, projectObj)
+          callback(null, projectObj);
         }
       });
     });
@@ -89,19 +78,13 @@ function projectStats(callback) {
     var wait = slugs.length,
         finalDetails = {};
     data.slugs.forEach(function (slug) {
-      var details = {},
-          url = expUrl.projectResourceUrl + slug + "/stats/";
-      projectRequest(url, function(err, projectData){
+      var details = {};
+      statisticsMethods(projectSlug, slug, function(err, projectData){
         if (err) {
           return callback(err);
         }
-        try {
-          projectData = JSON.parse(projectData);
-          details[slug] = projectData;
-        } catch (e) {
-          return callback(e);
-        }
-        _.extend(finalDetails, details)
+        details[slug] = projectData;
+        _.extend(finalDetails, details);
         wait--;
         if ( wait === 0 ) {
           callback(null, finalDetails);
