@@ -280,7 +280,7 @@ function projectSetMethods(options, callback) {
 
 function projectInstanceMethods(project_slug, callback) {
   project_slug = project_slug || projectSlug || "webmaker";
-  var url = expUrl.projectInstanceAPI.replace("project_slug", project_slug);
+  var url = expUrl.projectInstanceAPI.replace("<project_slug>", project_slug);
   projectRequest(url, function(err, project) {
     if (err) {
       return callback(err);
@@ -305,7 +305,7 @@ function projectInstanceMethods(project_slug, callback) {
 
 function resourcesSetMethod(project_slug, callback) {
   project_slug = project_slug || projectSlug || "webmaker";
-  var url = expUrl.projectResources.replace("project_slug", project_slug);
+  var url = expUrl.projectResources.replace("<project_slug>", project_slug);
   projectRequest(url, function(err, resources) {
     if (err) {
       return callback(err);
@@ -322,8 +322,8 @@ function resourcesSetMethod(project_slug, callback) {
 function resourcesInstanceMethods(project_slug, resource_slug, bool, callback) {
   project_slug = project_slug || projectSlug || "webmaker";
   resource_slug = resource_slug || projectSlug || "webmaker";
-  var url = expUrl.projectResource.replace("project_slug", project_slug)
-  .replace("resource_slug", resource_slug);
+  var url = expUrl.projectResource.replace("<project_slug>", project_slug)
+  .replace("<resource_slug>", resource_slug);
   if (!bool) {
     url = url.substr(0, url.lastIndexOf("/"))
   }
@@ -343,8 +343,8 @@ function resourcesInstanceMethods(project_slug, resource_slug, bool, callback) {
 function sourceLanguageMethods(project_slug, resource_slug, callback) {
   project_slug = project_slug || projectSlug || "webmaker";
   resource_slug = resource_slug || projectSlug || "webmaker";
-  var url = expUrl.projectResourceFile.replace("project_slug", project_slug)
-  .replace("resource_slug", resource_slug);
+  var url = expUrl.projectResourceFile.replace("<project_slug>", project_slug)
+  .replace("<resource_slug>", resource_slug);
   projectRequest(url, function(err, fileContent) {
     if (err) {
       return callback(err);
@@ -360,6 +360,139 @@ function sourceLanguageMethods(project_slug, resource_slug, callback) {
 
 /*
 * END RESOURCE API
+*/
+
+/*
+* LANGUAGE API
+*/
+
+function languageSetMethod(project_slug, callback) {
+  project_slug = project_slug || projectSlug || "webmaker";
+  var url = expUrl.languageSetURL.replace("<project_slug>", project_slug);
+  projectRequest(url, function(err, languages) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      languages = JSON.parse(languages);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, languages);
+  });
+};
+
+function languageInstanceMethod(project_slug, language_code, bool, callback) {
+  project_slug = project_slug || projectSlug || "webmaker";
+  var url = expUrl.languageInstanceURL.replace("<project_slug>", project_slug)
+  .replace("<language_code>", language_code);
+  if (!bool) {
+    url = url.substr(0, url.lastIndexOf("/"))
+  }
+  projectRequest(url, function(err, language) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      language = JSON.parse(language);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, language);
+  });
+};
+
+function contributorListFor(project_slug, language_code, type, callback) {
+  if(["coordinators", "reviewers", "translators"].indexOf(type) === -1) {
+    return callback(Error('Please specify the type of the contributor : "coordinators", "reviewers" or "translators"'));
+  }
+  project_slug = project_slug || projectSlug || "webmaker";
+  var url = expUrl.contributorForURL.replace("<project_slug>", project_slug)
+  .replace("<language_code>", language_code).replace("<type>", type);
+  projectRequest(url, function(err, list) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      list = JSON.parse(list);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, list);
+  });
+};
+
+/*
+* END LANGUAGE API
+*/
+
+
+/*
+* TRANSLATIONS API
+*/
+
+function translationInstanceMethod(project_slug, resource_slug, language_code, type, callback) {
+  // Allow calling with or without options.
+  if (typeof type === 'function') {
+    callback = type;
+    type = {};
+  } else {
+    callback = callback || function(){};
+  }
+  project_slug = project_slug || projectSlug || "webmaker";
+  var url = expUrl.translationMethodURL.replace("<project_slug>", project_slug)
+  .replace("<resource_slug>", resource_slug).replace("<language_code>", language_code);
+  projectRequest(url, type, function(err, content) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      content = JSON.parse(content);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, content);
+  });
+};
+
+/*
+* END TRANSLATIONS API
+*/
+
+
+/*
+* STATISTICS API
+*/
+
+function statisticsMethods(project_slug, resource_slug, language_code, callback) {
+  // Allow calling with or without options.
+  if (typeof language_code === 'function') {
+    callback = language_code;
+    language_code = "";
+  } else {
+    callback = callback || function(){};
+  }
+  project_slug = project_slug || projectSlug || "webmaker";
+  var url = expUrl.statsMethodURL.replace("<project_slug>", project_slug)
+  .replace("<resource_slug>", resource_slug).replace("<language_code>", language_code);
+  if (!language_code) {
+    url = url.substr(0, url.lastIndexOf("/"))
+  }
+  projectRequest(url, function(err, stats) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      stats = JSON.parse(stats);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, stats);
+  });
+};
+
+/*
+* END STATISTICS API
 */
 
 function getAllTXLanguages(callback) {
@@ -390,11 +523,19 @@ function languageNameFor(locale, callback) {
   });
 };
 
+module.exports.init = init;
 module.exports.projectSetMethods = projectSetMethods;
 module.exports.projectInstanceMethods = projectInstanceMethods;
 module.exports.resourcesSetMethod = resourcesSetMethod;
 module.exports.resourcesInstanceMethods = resourcesInstanceMethods;
 module.exports.sourceLanguageMethods = sourceLanguageMethods;
+module.exports.languageSetMethod = languageSetMethod;
+module.exports.languageInstanceMethod = languageInstanceMethod;
+module.exports.contributorListFor = contributorListFor;
+module.exports.translationInstanceMethod = translationInstanceMethod;
+module.exports.statisticsMethods = statisticsMethods;
+
+
 
 module.exports.numberOfContributors = getNumberOfContributors;
 module.exports.projectStats = projectStats;
@@ -403,6 +544,5 @@ module.exports.componentStats = componentStats;
 module.exports.getLangCompStats = getLangCompStats;
 module.exports.getLangStats = getLangStats;
 module.exports.projectLangDetails = projectLangDetails;
-module.exports.init = init;
-
 module.exports.getAllTXLanguages = getAllTXLanguages;
+

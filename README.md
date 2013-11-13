@@ -97,7 +97,7 @@ The `resourcesInstanceMethods` function returns a JSON encoded string with the d
 * last_update
 
 ``` javascript
-resourcesInstanceMethods("webmaker", "slug_name", true, function(err, data) {
+transifex.resourcesInstanceMethods("webmaker", "slug_name", true, function(err, data) {
   ...
 });
 ```
@@ -130,7 +130,7 @@ resourcesInstanceMethods("webmaker", "slug_name", true, function(err, data) {
 The `sourceLanguageMethods` function returns the translation in the source language of the resource.
 
 ``` javascript
-sourceLanguageMethods("webmaker", "profile", function(err, data) {
+transifex.sourceLanguageMethods("webmaker", "profile", function(err, data) {
   ...
 });
 ```
@@ -149,293 +149,159 @@ sourceLanguageMethods("webmaker", "profile", function(err, data) {
   login: 'Login' }
 ```
 
-#### getNumberOfContributors
+### Language API
 
-The `getNumberOfContributors` function return number of contributors in an array of objects.
+#### languageSetMethod
 
-``` javascript
-transifex.getNumberOfContributors(function(error, data){
-	...
-});
-```
+The `languageSetMethod` function returns a JSON encoded list with the fields language_code, coordinators, translators and reviewers that are responsible and work on the languages that belong to the project.
 
-Return the following **data**
-```
-[ { component: 'Contributors', count: 432 },
-  { component: 'Translators', count: 310 },
-  { component: 'Reviewers', count: 42 },
-  { component: 'Coordinators', count: 80 } ]
-```
-
-#### projectStats
-
-The `projectStats` function return the status of the project in each ***slug*** in all the ***languages*** available.
+***Only the project owner or the project maintainers have access to this method.***
 
 ``` javascript
-transifex.projectStats(function(error, data){
-	...
-});
-```
-
-Return the following **data**
-
-```
-     nl:
-      { reviewed_percentage: '0%',
-        completed: '100%',
-        untranslated_words: 0,
-        last_commiter: 'Fjoerfoks',
-        reviewed: 0,
-        translated_entities: 108,
-        translated_words: 874,
-        last_update: '2013-10-30 13:03:12',
-        untranslated_entities: 0 },
-     'en@pirate':
-      { reviewed_percentage: '0%',
-        completed: '1%',
-        untranslated_words: 872,
-        last_commiter: 'r3v1',
-        reviewed: 0,
-        translated_entities: 2,
-        translated_words: 2,
-        last_update: '2013-10-23 21:53:27',
-        untranslated_entities: 106 },
-        ...
-        ...
-        ...
-```
-
-#### getAllLanguages
-
-The `getAllLanguages` function return all the languages in the project with the code and its name.
-
-``` javascript
-transifex.getAllLanguages(function(error, data){
-	...
-});
-```
-
-Return the following ***data***
-
-```
-[ { locale: 'ar', name: 'Arabic' },
-  { locale: 'bn_IN', name: 'Bengali (India)' },
-  { locale: 'cs', name: 'Czech' },
-  { locale: 'el', name: 'Greek' },
-  { locale: 'de', name: 'German' },
-  { locale: 'en_GB', name: 'English (United Kingdom)' },
-  { locale: 'es', name: 'Spanish' },
-  { locale: 'eu', name: 'Basque' },
-  { locale: 'fa', name: 'Persian' },
-  { locale: 'fi', name: 'Finnish' },
-  { locale: 'fr', name: 'French' },
-  { locale: 'gl', name: 'Galician' },
-  ...
-  ...
-  ...
-  { locale: 'en@pirate', name: 'Pirate English' },
-  count: 59 ]
-```
-
-#### componentStats
-
-The `componentStats` function return the status for all the language for the specific slug name.
-
-``` javascript
-transifex.componentStats("slug_name", function(error, data){
-	...
-});
-```
-
-Return the following ***data***
-
-```
-  mr:
-   { reviewed_percentage: '0%',
-     completed: '59%',
-     untranslated_words: 84,
-     last_commiter: 'suraj.kawade',
-     reviewed: 0,
-     translated_entities: 13,
-     translated_words: 27,
-     last_update: '2013-10-21 19:58:53',
-     untranslated_entities: 9 },
-  pl_PL:
-   { reviewed_percentage: '0%',
-     completed: '59%',
-     untranslated_words: 62,
-     last_commiter: 'RLisak',
-     reviewed: 0,
-     translated_entities: 13,
-     translated_words: 49,
-     last_update: '2013-11-07 14:49:37',
-     untranslated_entities: 9 },
-```
-
-#### getLangCompStats
-
-The `getLangCompStats` function return the status for the given slug name and locale name.
-
-``` javascript
-transifex.getLangCompStats("slug_name", "th_TH", function(error, data){
-	...
-});
-```
-
-Return the following ***data***
-
-```
-{ reviewed_percentage: '100%',
-  completed: '100%',
-  untranslated_words: 0,
-  last_commiter: 'aali',
-  reviewed: 22,
-  translated_entities: 22,
-  translated_words: 111,
-  last_update: '2013-10-18 19:20:19',
-  untranslated_entities: 0 }
-```
-
-#### getLangStats
-
-The `getLangStats` function return the overall status for the given locale
-
-``` javascript
-transifex.getLangStats("es", function(error, data){
-	...
-});
-```
-
-Return the following ***data***
-
-```
-{ webmaker:
-   { reviewed_percentage: '100%',
-     completed: '100%',
-     untranslated_words: 0,
-     last_commiter: 'aali',
-     reviewed: 472,
-     translated_entities: 472,
-     translated_words: 3859,
-     last_update: '2013-11-05 16:43:56',
-     untranslated_entities: 0 },
-  goggles:
-   { reviewed_percentage: '100%',
-     completed: '100%',
-     untranslated_words: 0,
-     last_commiter: 'aali',
-     reviewed: 729,
-     translated_entities: 729,
-     translated_words: 11043,
-     last_update: '2013-11-05 16:41:30',
-     untranslated_entities: 0 },
-  thimble:
-   { reviewed_percentage: '100%',
-     completed: '100%',
-     untranslated_words: 0,
-     last_commiter: 'aali',
-     reviewed: 194,
-     translated_entities: 194,
-     translated_words: 4035,
-     last_update: '2013-11-05 16:46:11',
-     untranslated_entities: 0 },
-     ...
-     ...
-     ...
-```
-
-#### projectLangDetails
-
-The `projectLangDetails` function return full details on the project for the given locale
-
-``` javascript
-transifex.projectLangDetails("pt", function(error, data){
-	...
-});
-```
-
-Return the following ***data***
-
-```
-{ last_updated: '2013-11-05T16:46:11.852',
-  coordinators: [ 'aali' ],
-  reviewers: [ 'yokunzz' ],
-  total_segments: 1814,
-  untranslated_segments: 0,
-  translated_segments: 1814,
-  reviewed_segments: 1814,
-  translators:
-   [ 'jaideejung007',
-     'KEEP_DARK',
-	...
-	...
-	...
-     'PatiphanPinkeaw',
-     'splattr' ],
-  translated_words: 21085,
-  completed_percentage: 100 }
-```
-
-#### getAllTXlanguages
-
-The `getAllTXlanguages` function provides info regarding all languages supported by Transifex.
-
-``` javascript
-getAllTXLanguages(function(err, data) {
+transifex.languageSetMethod("webmaker", function(err, data) {
   ...
 });
 ```
-Return the following ***data***
 
+**Example**
 
 ```
+[
+ {
+  'language_code': 'el',
+  'coordinators': [
+   'kbairak',
+   'glezos'
+  ],
+  'translators': [
+   'mpessas',
+   'jkal',
+  ],
+  reviewers: [
+   'sawidis',
+   'ilias'
+  ]
+ },
+ {
+  'language_code': 'hi',
+  'coordinators': [
+   'rajeshr',
+   'rtnpro'
+  ],
+  'translators': [
+   'sayan'
+  ],
+  reviewers: [
+   'chandankumar'
+  ]
+ }
+]
+```
+
+#### languageInstanceMethod
+
+The `languageInstanceMethod` function returns a JSON encoded string with the fields language_code, coordinators, translators and reviewers for the specified language. If the boolean in third parameter set to `true`, then extra fields are returned:
+
+* translated_segments
+* untranslated_segments
+* reviewed_segments
+* total_segments
+* translated_words
+list
+
+***Only the project owner, the maintainers and the people working on the translations for that language may access this method.***
+
+``` javascript
+transifex.languageInstanceMethod("webmaker", "th_TH", true, function(err, data) {
   ...
+});
+```
+
+#### contributorListFor
+
+The `contributorListFor` function accept one of the three type of contributor, "coordinators", "reviewers" or "translators". It will returns a JSON list of the username of the specify type for the language of the project.
+
+***Only the project owner, the maintainers and the people working on the translations for that language may access this method.***
+
+``` javascript
+transifex.contributorListFor("webmaker", "th_TH", "<type_of_contributor>", function(err, data) {
   ...
-  { pluralequation: '(n > 1)',
-    code: 'wa',
-    name: 'Walloon',
-    nplurals: 2 },
-  { pluralequation: '(n != 1)',
-    code: 'war',
-    name: 'Wáray-Wáray',
-    nplurals: 2 },
-  { pluralequation: '(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3',
-    code: 'cy',
-    name: 'Welsh',
-    nplurals: 4 },
-  { pluralequation: '(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3',
-    code: 'cy_GB',
-    name: 'Welsh (United Kingdom)',
-    nplurals: 4 },
-  { pluralequation: '(n != 1)',
-    code: 'fy',
-    name: 'Western Frisian',
-    nplurals: 2 },
-  { pluralequation: '(n != 1)',
-    code: 'fy_NL',
-    name: 'Western Frisian (Netherlands)',
-    nplurals: 2 },
-  { pluralequation: '0', code: 'wo', name: 'Wolof', nplurals: 1 },
-  { pluralequation: '0',
-    code: 'wo_SN',
-    name: 'Wolof (Senegal)',
-    nplurals: 1 },
+});
+```
+
+**Example**
+
+```
+[
+ 'glezos',
+ 'kbairak'
+]
+```
+
+### Translations API
+
+#### translationInstanceMethod
+
+The `translationInstanceMethod` function returns the requested translation, if it exists. The translation is returned as a serialized string. Moreover, you can specify the mode of the downloaded file with the `status` in the **fourth** parameter. The available modes are:
+
+* default: to include all translated strings in the response.
+* reviewed: to include only reviewed strings in the response.
+* translator: to get a response suitable for offline translations.
+
+``` javascript
+transifex.translationInstanceMethod("webmaker", "profile", "zh_CN", { mode: "reviewed" }, function(err, data) {
+  ...
+});
+```
+
+*** `status` is optional. By default it will include all translated strings in the response (As mentioned in the default option).
+
+### Statistics API
+
+#### statisticsMethods
+
+The `statisticsMethods` function returns the statistics for the specified resource. If the language_code part is given, statistics are returned only for that specific language. Otherwise, statistics are returned for all available languages. The specific data returned per language are:
+
+* completed: the percentage of the resource that has been translated for the language.
+* translated_entities: the number of entities that have been translated for the language.
+* untranslated_entities: the number of entities that have not been translated for the language.
+* translated_words: the number of words that have been translated for the language.
+* untranslated_words: the number of words that have not been translated for the language.
+* last_update: the date and time that the last update for this translation took place.
+* last_committer: the username of the last user to have updated the translation for the language.
+* reviewed: the number of entities which have been reviewed for the language.
+* reviewed_percentage: the percentage of entities that have been reviewed for the language.
+
+``` javascript
+transifex.statisticsMethods("webmaker", "profile", "zh_CN", function(err, data) {
+...
+});
+```
+
+***Language code in the third parameter is optional. If not specified it will return all the available languages***
+
+**Example**
+
+```
+{
+    "en": {
+        "completed": "100%",
+        "untranslated_words": 0,
+        "last_commiter": "mpessas",
+        "last_update": "2011-12-05 19:59:52",
+        "translated_entities": 1017,
+        "translated_words": 6160,
+        "untranslated_entities": 0
+    },
+    "gu": {
+        "completed": "43%",
+        "untranslated_words": 4572,
+        "last_commiter": "mpessas",
+        "last_update": "2011-12-05 19:59:53",
+        "translated_entities": 439,
+        "translated_words": 1588,
+        "untranslated_entities": 578
+    },
     ...
-    ...
-```
-
-#### languageNameFor
-
-The `languageNameFor` functions provides info regarding a specific language supported by Transifex.
-
-``` javascript
-transifex.languageNameFor("th", function(err, data) {
-  ...
-});
-```
-
-Return the following ***data***
-
-```
-{ pluralequation: '0', code: 'th', name: 'Thai', nplurals: 1 }
+}
 ```
