@@ -1,11 +1,12 @@
 var request = require("request"),
     _ = require("lodash");
 
-var projectSlug,
+var projectSlug = "webmaker",
     userAuth,
     expUrl,
     authHeader,
-    slugs = [];
+    slugs = [],
+    expUrl = require("./url")(projectSlug).API;
 
 function init(options) {
   projectSlug = options.project_slug || "webmaker";
@@ -118,7 +119,7 @@ function getNumberOfContributors(callback) {
       numOfCoordinators = 0,
       totalNum = 0;
 
-  projectRequest(expUrl.languagesAPIUrl, function(err, projectDetails){
+  languageSetMethod(err, function(projectDetails) {
     if (err) {
       return callback(err);
     }
@@ -132,22 +133,12 @@ function getNumberOfContributors(callback) {
       numOfReviewers += data.reviewers.length;
       numOfCoordinators += data.coordinators.length;
     });
-    contributorsDetails.push({
-      "component": "Contributors",
-      "count": numOfTranslators + numOfReviewers + numOfCoordinators
-    });
-    contributorsDetails.push( {
-      "component": "Translators",
-      "count": numOfTranslators
-    });
-    contributorsDetails.push( {
-      "component": "Reviewers",
-      "count": numOfReviewers
-    });
-    contributorsDetails.push( {
-      "component": "Coordinators",
-      "count": numOfCoordinators
-    });
+    contributorsDetails = {
+      "Contributors": numOfTranslators + numOfReviewers + numOfCoordinators,
+      "Translators": numOfTranslators,
+      "Reviewers": numOfReviewers,
+      "Coordinators" :numOfCoordinators
+    };
     callback( null, contributorsDetails );
   });
 };
@@ -159,50 +150,6 @@ function getAllLanguages(callback) {
     }
     data.languages.count = data.languages.length;
     callback(null, data.languages);
-  });
-};
-
-function componentStats(component, callback) {
-  var url = expUrl.projectResourceUrl + component + "/stats/";
-  projectRequest(url, function(err, data){
-    if (err) {
-      return callback(err);
-    }
-    try {
-      data = JSON.parse(data);
-    } catch (e) {
-      return callback(e);
-    }
-    callback(null, data);
-  });
-};
-
-function getLangCompStats(component, lang, callback) {
-  projectDetails(function(error, data) {
-    if (error) {
-      return callback(error);
-    }
-    var arrOfLocale = [];
-    data.languages.forEach(function(langCode) {
-      arrOfLocale.push(langCode.locale);
-    });
-    if (data.slugs.indexOf(component) === -1) {
-      return callback(Error("Unknown component's name"));
-    } else if (arrOfLocale.indexOf(lang) === -1) {
-      return callback(Error("Unknown locale's name"));
-    }
-    var url = expUrl.projectResourceUrl + component + "/stats/" + lang + "/";
-    projectRequest(url, function(err, langStat) {
-      if (err) {
-        return callback(err);
-      }
-      try {
-        langStat = JSON.parse(langStat);
-      } catch (e) {
-        return callback(e);
-      }
-      callback(null, langStat);
-    });
   });
 };
 
@@ -236,29 +183,6 @@ function getLangStats(locale, callback) {
   });
 };
 
-function projectLangDetails(locale, callback) {
-  projectDetails(function(error, data) {
-    if (error) {
-      return callback(error);
-    }
-    if (!findLocale(locale, data)) {
-      return callback(Error("Unknown locale's name"));
-    }
-    var url = expUrl.languageAPI + locale + "/?details"
-    projectRequest(url, function(err, langDetails) {
-      if (err) {
-        return callback(err);
-      }
-      try {
-        langDetails = JSON.parse(langDetails);
-      } catch (e) {
-        return callback(e);
-      }
-      langDetails.completed_percentage = Math.round(langDetails.translated_segments * 100 / langDetails.total_segments);
-      callback(null, langDetails);
-    });
-  });
-};
 
 /*
 * PROJECT APIs
@@ -320,6 +244,13 @@ function resourcesSetMethod(project_slug, callback) {
 };
 
 function resourcesInstanceMethods(project_slug, resource_slug, bool, callback) {
+  // Allow calling with or without options.
+  if (typeof bool === 'function') {
+    callback = bool;
+    options = true;
+  } else {
+    callback = callback || function(){};
+  }
   project_slug = project_slug || projectSlug || "webmaker";
   resource_slug = resource_slug || projectSlug || "webmaker";
   var url = expUrl.projectResource.replace("<project_slug>", project_slug)
@@ -383,6 +314,13 @@ function languageSetMethod(project_slug, callback) {
 };
 
 function languageInstanceMethod(project_slug, language_code, bool, callback) {
+  // Allow calling with or without options.
+  if (typeof bool === 'function') {
+    callback = bool;
+    bool = true;
+  } else {
+    callback = callback || function(){};
+  }
   project_slug = project_slug || projectSlug || "webmaker";
   var url = expUrl.languageInstanceURL.replace("<project_slug>", project_slug)
   .replace("<language_code>", language_code);
@@ -397,6 +335,9 @@ function languageInstanceMethod(project_slug, language_code, bool, callback) {
       language = JSON.parse(language);
     } catch (e) {
       return callback(e);
+    }
+    if(bool) {
+      language.completed_percentage = Math.round(language.translated_segments * 100 / language.total_segments);
     }
     callback(null, language);
   });
@@ -495,19 +436,6 @@ function statisticsMethods(project_slug, resource_slug, language_code, callback)
 * END STATISTICS API
 */
 
-function getAllTXLanguages(callback) {
-  projectRequest(expUrl.allLanguages, function(err, languages) {
-    if (err) {
-      return callback(err);
-    }
-    try {
-      languages = JSON.parse(languages);
-    } catch (e) {
-      return callback(e);
-    }
-    callback(null, languages);
-  });
-};
 
 /*
 * LANGUAGE INFO API
@@ -557,16 +485,10 @@ module.exports.languageInstanceMethod = languageInstanceMethod;
 module.exports.contributorListFor = contributorListFor;
 module.exports.translationInstanceMethod = translationInstanceMethod;
 module.exports.statisticsMethods = statisticsMethods;
-module.exports.languageInstanceMethods = statisticsMethods;
-module.exports.languageSetMethods = statisticsMethods;
-
-
+module.exports.languageInstanceMethods = languageInstanceMethods;
+module.exports.languageSetMethods = languageSetMethods;
 
 module.exports.numberOfContributors = getNumberOfContributors;
 module.exports.projectStats = projectStats;
 module.exports.getAllLanguages = getAllLanguages;
-module.exports.componentStats = componentStats;
-module.exports.getLangCompStats = getLangCompStats;
 module.exports.getLangStats = getLangStats;
-module.exports.projectLangDetails = projectLangDetails;
-module.exports.getAllTXLanguages = getAllTXLanguages;

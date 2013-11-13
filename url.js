@@ -17,12 +17,7 @@ module.exports = function ( projectName ) {
     languagesURL: BASE_URL + "languages/",
     txProjects: BASE_URL + "projects/",
     languageInfoURL: BASE_URL + "language/",
-    languageCodeUrl: BASEP_URL + "language/",
-    languagesAPIUrl: projectUrl + "languages/",
-    resourceAPIUrl: projectUrl + "resources/",
-    projectResourceUrl: projectUrl + "resource/",
-    projectDetailsAPIUrl: projectUrl + "?details",
-    languageAPI: projectUrl + "language/"
+    projectDetailsAPIUrl: projectUrl + "?details"
   };
 
   return {

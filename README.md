@@ -96,6 +96,8 @@ The `resourcesInstanceMethods` function returns a JSON encoded string with the d
 * accept_translations
 * last_update
 
+*** Third parameter is option, and set to true by default.***
+
 ``` javascript
 transifex.resourcesInstanceMethods("webmaker", "slug_name", true, function(err, data) {
   ...
@@ -207,12 +209,15 @@ The `languageInstanceMethod` function returns a JSON encoded string with the fie
 * reviewed_segments
 * total_segments
 * translated_words
-list
+* list
+* completed_percentage
+
+**Third parameter is optional. It is set to true by default**
 
 ***Only the project owner, the maintainers and the people working on the translations for that language may access this method.***
 
 ``` javascript
-transifex.languageInstanceMethod("webmaker", "th_TH", true, function(err, data) {
+transifex.languageInstanceMethod("webmaker", "th_TH", false, function(err, data) {
   ...
 });
 ```
