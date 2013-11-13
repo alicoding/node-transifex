@@ -26,7 +26,7 @@ The module exposes a number of useful functions, including:
 
 #### projectSetMethods
 
-The `getAllTXprojects` function returns a list of (slug, name, description, source_language_code) for all projects the user has access to in JSON format. This method supports pagination through the options start and end.
+The `projectSetMethods` function returns a list of (slug, name, description, source_language_code) for all projects the user has access to in JSON format. This method supports pagination through the options start and end.
 
 ``` javascript
 transifex.projectSetMethods(options, function(err, data) {
@@ -48,7 +48,7 @@ Return only the first 20 projects from the list.
 
 #### projectInstanceMethods
 
-The `getAllTXprojects` function returns the fields slug, name, description and source_language_code for the project of the specified slug in JSON format includes the above fields as well as the following ones:
+The `projectInstanceMethods` function returns the fields slug, name, description and source_language_code for the project of the specified slug in JSON format includes the above fields as well as the following ones:
 
 * long_description
 * homepage
