@@ -254,7 +254,7 @@ transifex.translationInstanceMethod("webmaker", "profile", "zh_CN", { mode: "rev
 });
 ```
 
-*** `status` is optional. By default it will include all translated strings in the response (As mentioned in the default option).***
+`status` ***is optional. By default it will include all translated strings in the response (As mentioned in the default option).***
 
 ### Statistics API
 
