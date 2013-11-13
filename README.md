@@ -305,3 +305,34 @@ transifex.statisticsMethods("webmaker", "profile", "zh_CN", function(err, data) 
     ...
 }
 ```
+
+### Language Info API
+
+#### languageInstanceMethods
+
+The `languageInstanceMethods` function returns the fields name, code, nplurals and pluralequation for the language associated with the specified code in JSON format.
+
+``` javascript
+
+transifex.languageInstanceMethods("th_TH", function(err, data) {
+  ...
+});
+```
+
+**Example**
+```
+{ pluralequation: '0',
+  code: 'th_TH',
+  name: 'Thai (Thailand)',
+  nplurals: 1 }
+```
+
+#### languageSetMethods
+
+The `languageSetMethods` function returns the fields name, code, nplurals and pluralequation for all languages supported by Transifex in JSON format.
+
+``` javascript
+transifex.languageSetMethods(function(err, data) {
+  ...
+});
+```

@@ -509,8 +509,13 @@ function getAllTXLanguages(callback) {
   });
 };
 
-function languageNameFor(locale, callback) {
-  projectRequest(expUrl.languageInfoURL + locale, function(err, language) {
+/*
+* LANGUAGE INFO API
+*/
+
+function languageInstanceMethods(language_code, callback) {
+  var url = expUrl.languageURL.replace("<language_code>", language_code);
+  projectRequest(url, function(err, language) {
     if (err) {
       return callback(err);
     }
@@ -523,6 +528,24 @@ function languageNameFor(locale, callback) {
   });
 };
 
+function languageSetMethods(callback) {
+  projectRequest(expUrl.languagesURL, function(err, languages) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      languages = JSON.parse(languages);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, languages);
+  });
+};
+
+/*
+* END LANGUAGE INFO API
+*/
+
 module.exports.init = init;
 module.exports.projectSetMethods = projectSetMethods;
 module.exports.projectInstanceMethods = projectInstanceMethods;
@@ -534,6 +557,8 @@ module.exports.languageInstanceMethod = languageInstanceMethod;
 module.exports.contributorListFor = contributorListFor;
 module.exports.translationInstanceMethod = translationInstanceMethod;
 module.exports.statisticsMethods = statisticsMethods;
+module.exports.languageInstanceMethods = statisticsMethods;
+module.exports.languageSetMethods = statisticsMethods;
 
 
 
@@ -545,4 +570,3 @@ module.exports.getLangCompStats = getLangCompStats;
 module.exports.getLangStats = getLangStats;
 module.exports.projectLangDetails = projectLangDetails;
 module.exports.getAllTXLanguages = getAllTXLanguages;
-
