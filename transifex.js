@@ -102,14 +102,9 @@ function getNumberOfContributors(callback) {
       numOfCoordinators = 0,
       totalNum = 0;
 
-  languageSetMethod(err, function(projectDetails) {
+  languageSetMethod(projectSlug, function(err, projectDetails) {
     if (err) {
       return callback(err);
-    }
-    try {
-      projectDetails = JSON.parse(projectDetails);
-    } catch (e) {
-      return callback(e);
     }
     projectDetails.forEach(function(data) {
       numOfTranslators += data.translators.length;
