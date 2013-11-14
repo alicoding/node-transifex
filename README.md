@@ -313,7 +313,7 @@ transifex.statisticsMethods("webmaker", "profile", "zh_CN", function(err, data) 
 
 #### languageStatisticsMethods
 
-The `languageStatisticsMethods` function returns the statistics for all the resouce_slug for the specified language_code. The specific data returned per language are:
+The `languageStatisticsMethods` function returns the statistics for all the resource_slug for the specified language_code. The specific data returned per language are:
 
 * completed: the percentage of the resource that has been translated for the language.
 * translated_entities: the number of entities that have been translated for the language.

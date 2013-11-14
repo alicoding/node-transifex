@@ -462,6 +462,6 @@ module.exports.languageInstanceMethods = languageInstanceMethods;
 module.exports.languageSetMethods = languageSetMethods;
 module.exports.languageStatisticsMethods = languageStatisticsMethods;
 
-module.exports.numberOfContributors = getNumberOfContributors;
+module.exports.getNumberOfContributors = getNumberOfContributors;
 module.exports.projectStats = projectStats;
 module.exports.getAllLanguages = getAllLanguages;
