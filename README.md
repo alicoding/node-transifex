@@ -362,6 +362,65 @@ languageStatisticsMethods("es", function(err, data) {
 }
 ```
 
+#### projectStatisticsMethods
+
+The `projectStatisticsMethods` function returns the statistics for all the resource_slug in all the language_code for the whole project. The specific data returned per language and resource_slug are:
+
+* completed: the percentage of the resource that has been translated for the language.
+* translated_entities: the number of entities that have been translated for the language.
+* untranslated_entities: the number of entities that have not been translated for the language.
+* translated_words: the number of words that have been translated for the language.
+* untranslated_words: the number of words that have not been translated for the language.
+* last_update: the date and time that the last update for this translation took place.
+* last_committer: the username of the last user to have updated the translation for the language.
+* reviewed: the number of entities which have been reviewed for the language.
+* reviewed_percentage: the percentage of entities that have been reviewed for the language.
+
+``` javascript
+transifex.projectStatisticsMethods(function(err, data) {
+  ...
+});
+```
+
+**Example**
+
+```
+  { `resource_slug_name`: {
+     hu:
+      { reviewed_percentage: '0%',
+        completed: '0%',
+        untranslated_words: 111,
+        last_commiter: 'aali',
+        reviewed: 0,
+        translated_entities: 0,
+        translated_words: 0,
+        last_update: '2013-11-01 19:04:36',
+        untranslated_entities: 22 },
+        ...
+        ...
+        ...
+     fa:
+      { reviewed_percentage: '0%',
+        completed: '0%',
+        untranslated_words: 111,
+        last_commiter: 'aali',
+        reviewed: 0,
+        translated_entities: 0,
+        translated_words: 0,
+        last_update: '2013-10-26 19:53:27',
+        untranslated_entities: 22 },
+     hi:
+      { reviewed_percentage: '0%',
+        completed: '0%',
+        untranslated_words: 111,
+        last_commiter: 'aali',
+        reviewed: 0,
+        translated_entities: 0,
+        translated_words: 0,
+        last_update: '2013-10-18 19:13:32',
+        untranslated_entities: 22 } } }
+```
+
 ### Language Info API
 
 #### languageInstanceMethods
@@ -391,4 +450,45 @@ The `languageSetMethods` function returns the fields name, code, nplurals and pl
 transifex.languageSetMethods(function(err, data) {
   ...
 });
+```
+
+#### languageSetInfoMethods
+
+The `languageSetInfoMethods` function returns the field name and code for all languages available in the project.
+
+``` javascript
+transifex.languageSetInfoMethods(function(err, data) {
+  ...
+});
+```
+
+**Example**
+
+```
+[ { locale: 'cs', name: 'Czech' },
+  { locale: 'el', name: 'Greek' },
+  { locale: 'bn_IN', name: 'Bengali (India)' },
+  { locale: 'ar', name: 'Arabic' },
+  { locale: 'de', name: 'German' },
+  { locale: 'es', name: 'Spanish' },
+  { locale: 'en_GB', name: 'English (United Kingdom)' },
+  { locale: 'eu', name: 'Basque' },
+  { locale: 'fi', name: 'Finnish' },
+  { locale: 'fa', name: 'Persian' },
+  { locale: 'fr', name: 'French' },
+  { locale: 'gl', name: 'Galician' },
+  { locale: 'he', name: 'Hebrew' },
+  { locale: 'hi', name: 'Hindi' },
+  { locale: 'hu', name: 'Hungarian' },
+  { locale: 'id', name: 'Indonesian' },
+  { locale: 'it', name: 'Italian' },
+  { locale: 'ja', name: 'Japanese' },
+  { locale: 'ml', name: 'Malayalam' },
+  { locale: 'mr', name: 'Marathi' },
+  { locale: 'ms', name: 'Malay' },
+  { locale: 'my', name: 'Burmese' },
+  { locale: 'nb', name: 'Norwegian Bokmål' },
+  { locale: 'ne', name: 'Nepali' },
+  { locale: 'nl', name: 'Dutch' },
+  { locale: 'pt', name: 'Portuguese' }]
 ```

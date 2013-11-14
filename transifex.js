@@ -36,54 +36,20 @@ function projectRequest(url, options, callback) {
   });
 };
 
-function projectDetails(callback) {
-  var languages = [],
-      projectObj = {},
-      languagesInfo = [];
-
-  projectInstanceMethods(projectSlug, function(err, projectData){
-    if (err) {
-      return callback(err);
-    }
-    languages = projectData.teams;
-    projectData.resources.forEach(function(data) {
-      slugs.push(data.slug);
-    });
-    var wait = languages.length;
-    languages.forEach(function(language) {
-      languageInstanceMethods(language, function(err, data) {
-        if (err) {
-          return callback(err);
-        }
-        languagesInfo.push({
-          locale: data.code,
-          name: data.name
-        });
-        wait--;
-        if (wait === 0) {
-          projectObj.languages = languagesInfo;
-          projectObj.slugs = slugs;
-          callback(null, projectObj);
-        }
-      });
-    });
-  });
-};
-
-function projectStats(callback) {
-  projectDetails(function (error, data) {
+function projectStatisticsMethods(callback) {
+  resourcesSetMethod(projectSlug, function(error, data) {
     if (error) {
       return callback(error);
     }
-    var wait = slugs.length,
-        finalDetails = {};
-    data.slugs.forEach(function (slug) {
+    var finalDetails = {},
+      wait = data.length;
+    _.findKey(data, function(resource) {
       var details = {};
-      statisticsMethods(projectSlug, slug, function(err, projectData){
+      statisticsMethods(projectSlug, resource.slug, function(err, projectData){
         if (err) {
           return callback(err);
         }
-        details[slug] = projectData;
+        details[resource.slug] = projectData;
         _.extend(finalDetails, details);
         wait--;
         if ( wait === 0 ) {
@@ -102,11 +68,11 @@ function getNumberOfContributors(callback) {
       numOfCoordinators = 0,
       totalNum = 0;
 
-  languageSetMethod(projectSlug, function(err, projectDetails) {
+  languageSetMethod(projectSlug, function(err, allListDetails) {
     if (err) {
       return callback(err);
     }
-    projectDetails.forEach(function(data) {
+    allListDetails.forEach(function(data) {
       numOfTranslators += data.translators.length;
       numOfReviewers += data.reviewers.length;
       numOfCoordinators += data.coordinators.length;
@@ -121,13 +87,30 @@ function getNumberOfContributors(callback) {
   });
 };
 
-function getAllLanguages(callback) {
-  projectDetails(function (error, data) {
+function languageSetInfoMethods(callback) {
+  projectInstanceMethods(projectSlug, function (error, data) {
     if (error) {
       return callback(error);
     }
-    data.languages.count = data.languages.length;
-    callback(null, data.languages);
+    var languages = data.teams,
+        wait = languages.length,
+        languagesInfo = [];
+
+    languages.forEach(function(language) {
+      languageInstanceMethods(language, function(err, lang) {
+        if (err) {
+          return callback(err);
+        }
+        languagesInfo.push({
+          locale: lang.code,
+          name: lang.name
+        });
+        wait--;
+        if (wait === 0) {
+          callback(null, languagesInfo);
+        }
+      });
+    });
   });
 };
 
@@ -456,7 +439,7 @@ module.exports.statisticsMethods = statisticsMethods;
 module.exports.languageInstanceMethods = languageInstanceMethods;
 module.exports.languageSetMethods = languageSetMethods;
 module.exports.languageStatisticsMethods = languageStatisticsMethods;
+module.exports.languageSetInfoMethods = languageSetInfoMethods;
+module.exports.projectStatisticsMethods = projectStatisticsMethods;
 
 module.exports.getNumberOfContributors = getNumberOfContributors;
-module.exports.projectStats = projectStats;
-module.exports.getAllLanguages = getAllLanguages;
