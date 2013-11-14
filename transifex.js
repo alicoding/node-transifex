@@ -88,29 +88,20 @@ function getNumberOfContributors(callback) {
 };
 
 function languageSetInfoMethods(callback) {
-  projectInstanceMethods(projectSlug, function (error, data) {
+  resourcesSetMethod(projectSlug, function (error, resourceData) {
     if (error) {
       return callback(error);
     }
-    var languages = data.teams,
-        wait = languages.length,
-        languagesInfo = [];
-
-    languages.forEach(function(language) {
-      languageInstanceMethods(language, function(err, lang) {
-        if (err) {
-          return callback(err);
-        }
+    var languagesInfo = [];
+    resourcesInstanceMethods(projectSlug, resourceData[0].slug, function(err, data) {
+      data.available_languages.forEach(function(language) {
         languagesInfo.push({
-          locale: lang.code,
-          name: lang.name
+          locale: language.code,
+          name: language.name
         });
-        wait--;
-        if (wait === 0) {
-          callback(null, languagesInfo);
-        }
       });
-    });
+      callback(null, languagesInfo)
+    })
   });
 };
 
