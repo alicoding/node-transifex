@@ -243,6 +243,41 @@ transifex.contributorListFor("webmaker", "th_TH", "<type_of_contributor>", funct
 ]
 ```
 
+#### listOfContributors
+
+The `listOfContributors` function returns unique list of array of all the contributors in the project. The list also sorted in an alphabetical order.
+
+``` javascript
+transifex.listOfContributors(function(err, data) {
+  ...
+});
+```
+
+**Example**
+
+```
+[
+  "123_ayesha098",
+  "3ar7hkung",
+  "aali",
+  "Abdelhak",
+  "adityaputra",
+  "adraga",
+  "agnusdark",
+  "ahkeno",
+  "ahmedjubayer",
+  "ahsan_hq",
+  "akenygren",
+  "alexfuser",
+  "alexlakatos",
+  "alexxed",
+  "alfasst",
+  "amaciel"
+  ...
+  ...
+]
+```
+
 ### Translations API
 
 #### translationInstanceMethod

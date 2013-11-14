@@ -60,8 +60,7 @@ function projectStatisticsMethods(callback) {
   });
 };
 
-// return the number of contributors in each role and the total number
-function getNumberOfContributors(callback) {
+function listOfContributors(callback) {
   var contributorsDetails = [],
       numOfTranslators = 0,
       numOfReviewers = 0,
@@ -72,18 +71,21 @@ function getNumberOfContributors(callback) {
     if (err) {
       return callback(err);
     }
-    allListDetails.forEach(function(data) {
-      numOfTranslators += data.translators.length;
-      numOfReviewers += data.reviewers.length;
-      numOfCoordinators += data.coordinators.length;
-    });
-    contributorsDetails = {
-      "Contributors": numOfTranslators + numOfReviewers + numOfCoordinators,
-      "Translators": numOfTranslators,
-      "Reviewers": numOfReviewers,
-      "Coordinators" :numOfCoordinators
+    var contributorLists = [];
+    for (var i = allListDetails.length - 1; i >= 0; i--) {
+      Object.keys(allListDetails[i]).forEach(function(typeName) {
+        if(allListDetails[i][typeName].length >= 0 && typeName != "language_code") {
+          for (var x = allListDetails[i][typeName].length - 1; x >= 0; x--) {
+            if(contributorLists.indexOf(allListDetails[i][typeName][x]) === -1) {
+              contributorLists.push(allListDetails[i][typeName][x]);
+            }
+          };
+        }
+      });
     };
-    callback( null, contributorsDetails );
+    callback( null, contributorLists.sort(function (a, b) {
+      return a.toLowerCase().localeCompare(b.toLowerCase());
+    }));
   });
 };
 
@@ -432,5 +434,4 @@ module.exports.languageSetMethods = languageSetMethods;
 module.exports.languageStatisticsMethods = languageStatisticsMethods;
 module.exports.languageSetInfoMethods = languageSetInfoMethods;
 module.exports.projectStatisticsMethods = projectStatisticsMethods;
-
-module.exports.getNumberOfContributors = getNumberOfContributors;
+module.exports.listOfContributors = listOfContributors;
