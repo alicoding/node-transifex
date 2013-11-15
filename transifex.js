@@ -224,11 +224,6 @@ function sourceLanguageMethods(project_slug, resource_slug, callback) {
     if (err) {
       return callback(err);
     }
-    try {
-      fileContent = JSON.parse(fileContent);
-    } catch (e) {
-      return callback(e);
-    }
     callback(null, fileContent);
   });
 };
@@ -330,11 +325,6 @@ function translationInstanceMethod(project_slug, resource_slug, language_code, t
   projectRequest(url, type, function(err, content) {
     if (err) {
       return callback(err);
-    }
-    try {
-      content = JSON.parse(content);
-    } catch (e) {
-      return callback(e);
     }
     callback(null, content);
   });

@@ -151,6 +151,8 @@ transifex.sourceLanguageMethods("webmaker", "profile", function(err, data) {
   login: 'Login' }
 ```
 
+**Note:** The responded content is not parsed.
+
 ### Language API
 
 #### languageSetMethod
@@ -295,6 +297,8 @@ transifex.translationInstanceMethod("webmaker", "profile", "zh_CN", { mode: "rev
 ```
 
 `status` ***is optional. By default it will include all translated strings in the response (As mentioned in the default option).***
+
+**Note:** The responded content is not parsed.
 
 ### Statistics API
 
