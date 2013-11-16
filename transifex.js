@@ -17,6 +17,7 @@ function init(options) {
 
 // request the project details based on the url provided
 function projectRequest(url, options, callback) {
+  var fileTypeContent;
   // Allow calling with or without options.
   if (typeof options === 'function') {
     callback = options;
@@ -32,7 +33,12 @@ function projectRequest(url, options, callback) {
     if (response.statusCode !== 200) {
       return callback(Error(url + " returned " + response.statusCode));
     }
-    callback(null, body);
+    if(response.headers['content-disposition']) {
+      var str = response.headers['content-disposition'];
+      fileTypeContent = str.substring(str.lastIndexOf(".")).match(/\w+/);
+      fileTypeContent = fileTypeContent[0] || null;
+    }
+    callback(null, body, fileTypeContent);
   });
 };
 
@@ -322,11 +328,11 @@ function translationInstanceMethod(project_slug, resource_slug, language_code, t
   project_slug = project_slug || projectSlug || "webmaker";
   var url = expUrl.translationMethodURL.replace("<project_slug>", project_slug)
   .replace("<resource_slug>", resource_slug).replace("<language_code>", language_code);
-  projectRequest(url, type, function(err, content) {
+  projectRequest(url, type, function(err, content, type) {
     if (err) {
       return callback(err);
     }
-    callback(null, content);
+    callback(null, content, type);
   });
 };
 

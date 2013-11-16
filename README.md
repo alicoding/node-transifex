@@ -284,14 +284,14 @@ transifex.listOfContributors(function(err, data) {
 
 #### translationInstanceMethod
 
-The `translationInstanceMethod` function returns the requested translation, if it exists. The translation is returned as a serialized string. Moreover, you can specify the mode of the downloaded file with the `status` in the **fourth** parameter. The available modes are:
+The `translationInstanceMethod` function returns the requested translation, if it exists. The translation is returned as a serialized string with the type name e.g. type `po` or `json`. Type also refer to the file extension. Moreover, you can specify the mode of the downloaded file with the `status` in the **fourth** parameter. The available modes are:
 
 * default: to include all translated strings in the response.
 * reviewed: to include only reviewed strings in the response.
 * translator: to get a response suitable for offline translations.
 
 ``` javascript
-transifex.translationInstanceMethod("webmaker", "profile", "zh_CN", { mode: "reviewed" }, function(err, data) {
+transifex.translationInstanceMethod("webmaker", "profile", "zh_CN", { mode: "reviewed" }, function(err, data, type) {
   ...
 });
 ```
