@@ -7,10 +7,17 @@
     "type": "git",
     "url": "git://github.com/alicoding/node-transifex.git"
   },
+  "bin": {
+    "transifex": "./bin/index.js"
+  },
+  "preferGlobal": true,
   "author": "Ali Al Dallal <ali@alicoding.com>",
   "license": "MIT",
   "dependencies": {
+    "commander": "2.0.0",
     "lodash": "2.2.1",
-    "request": "2.27.0"
+    "mkpath": "0.1.0",
+    "request": "2.27.0",
+    "path": "0.4.9"
   }
 }
