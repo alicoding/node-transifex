@@ -17,15 +17,23 @@ function writeFile( relPath, strings, locale, callback ) {
   });
 }
 
+function failed(err) {
+  console.error(err);
+  process.exit(1);
+}
+
 function importFromTransifex(options) {
 // Retrieve all the data e.g. resource names, category names
 transifex.resourcesSetMethod(projectName, function(error, data) {
   if ( error ) {
-    console.error(error);
+    failed(error);
   }
 
   // Retrieve all the supported languages
-  transifex.projectInstanceMethods(projectName, function (err, languages) {
+  transifex.projectInstanceMethods(projectName, function (error, languages) {
+    if ( error ) {
+      failed(error);
+    }
 
     // We are going to iterate through all the languages first before calling the function
     var wait = languages.teams.length;
@@ -34,6 +42,10 @@ transifex.resourcesSetMethod(projectName, function(error, data) {
     resources = data.filter(function(v) {
       return v.category === categoryName;
     });
+
+    if(!resources.length) {
+      failed("Error: Please check your category name");
+    }
 
     var i = resources.length - 1;
     resources.forEach(function(resource) {
@@ -53,6 +65,10 @@ transifex.resourcesSetMethod(projectName, function(error, data) {
             if(wait === 0) {
               i--;
               wait = languages.teams.length;
+              if(i < 0) {
+                console.log("Transifex: Download completed");
+                process.exit(1);
+              }
             }
         });
       });
@@ -69,22 +85,22 @@ function main() {
     .option('-d, --dir <path>', 'locale dir for the downloaded files')
     .parse(process.argv);
   if (!program.credential) {
-    throw new Error("Bad Config - Please specify your Transifex's credential");
+    failed("Bad Config - Please specify your Transifex's credential");
   } else {
     userAuth = program.credential;
   }
   if (!program.project) {
-    throw new Error("Bad Config - Please specify your project slug's name");
+    failed("Bad Config - Please specify your project slug's name");
   } else {
     projectName = program.project;
   }
   if (!program.category) {
-    throw new Error("Bad Config - Please specify your project category's name");
+    failed("Bad Config - Please specify your project category's name");
   } else {
     categoryName = program.category;
   }
   if (!program.dir) {
-    throw new Error("Bad Config - Please specify the path for the downloaded files");
+    failed("Bad Config - Please specify the path for the downloaded files");
   } else {
     dirName = program.dir;
   }
