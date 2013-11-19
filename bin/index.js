@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var transifex = require("../transifex"),
     path = require('path'),
     fs = require('fs'),
