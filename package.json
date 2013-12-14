@@ -10,6 +10,17 @@
   "bin": {
     "transifex": "./bin/index.js"
   },
+  "keywords": [
+    "download transifex",
+    "l10n",
+    "transifex",
+    "localization",
+    "cli",
+    "client",
+    "Transifex client",
+    "node transifex",
+    "transifex API"
+  ],
   "preferGlobal": true,
   "author": "Ali Al Dallal <ali@alicoding.com>",
   "license": "MIT",
