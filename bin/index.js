@@ -40,7 +40,11 @@ transifex.resourcesSetMethod(projectName, function(error, data) {
 
     // Check if there is more than one resource with the same category
     resources = data.filter(function(v) {
-      return v.category === categoryName;
+      if(v.categories !== null) {
+        if(v.categories.indexOf(categoryName) !== -1) {
+          return true;
+        }
+      }
     });
 
     if(!resources.length) {
@@ -81,7 +85,7 @@ function main() {
   program
     .option('-u, --credential <user:pass>', 'specify a Transifex username and password in the form username:password')
     .option('-p, --project <slug>', 'specify project slug')
-    .option('-c, --category <name>', 'specify project slug')
+    .option('-c, --category <name>', 'specify project category name')
     .option('-d, --dir <path>', 'locale dir for the downloaded files')
     .parse(process.argv);
   if (!program.credential) {
