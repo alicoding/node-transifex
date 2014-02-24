@@ -25,10 +25,9 @@
   "author": "Ali Al Dallal <ali@alicoding.com>",
   "license": "MIT",
   "dependencies": {
-    "commander": "2.0.0",
-    "lodash": "2.2.1",
-    "mkpath": "0.1.0",
-    "request": "2.27.0",
-    "path": "0.4.9"
+    "commander": "~2.1.0",
+    "lodash": "~2.4.1",
+    "mkpath": "~0.1.0",
+    "request": "2.34.0"
   }
 }

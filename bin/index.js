@@ -71,7 +71,7 @@ transifex.resourcesSetMethod(projectName, function(error, data) {
               wait = languages.teams.length;
               if(i < 0) {
                 console.log("Transifex: Download completed");
-                process.exit(1);
+                process.exit(0);
               }
             }
         });
