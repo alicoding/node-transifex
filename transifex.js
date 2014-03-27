@@ -342,7 +342,6 @@ function translationStringsMethod(project_slug, resource_slug, language_code, ca
   var url = expUrl.translationStringsURL.replace("<project_slug>", project_slug)
                                         .replace("<resource_slug>", resource_slug)
                                         .replace("<language_code>", language_code);
-  console.log(url);
   projectRequest(url, function(err, content) {
     if (err) {
       return callback(err);
