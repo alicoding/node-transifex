@@ -336,6 +336,20 @@ function translationInstanceMethod(project_slug, resource_slug, language_code, t
   });
 };
 
+
+function translationStringsMethod(project_slug, resource_slug, language_code, callback) {
+  project_slug = project_slug || projectSlug || "webmaker";
+  var url = expUrl.translationStringsURL.replace("<project_slug>", project_slug)
+                                        .replace("<resource_slug>", resource_slug)
+                                        .replace("<language_code>", language_code);
+  projectRequest(url, function(err, content) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, content);
+  });
+};
+
 /*
 * END TRANSLATIONS API
 */
@@ -424,6 +438,7 @@ module.exports.languageSetMethod = languageSetMethod;
 module.exports.languageInstanceMethod = languageInstanceMethod;
 module.exports.contributorListFor = contributorListFor;
 module.exports.translationInstanceMethod = translationInstanceMethod;
+module.exports.translationStringsMethod = translationStringsMethod;
 module.exports.statisticsMethods = statisticsMethods;
 module.exports.languageInstanceMethods = languageInstanceMethods;
 module.exports.languageSetMethods = languageSetMethods;

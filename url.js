@@ -14,6 +14,7 @@ module.exports = function ( projectName ) {
     languageInstanceURL: plSlug + "?details",
     contributorForURL: plSlug + "<type>/",
     translationMethodURL: prSlug + "translation/<language_code>/?file",
+    translationStringsURL: prSlug + "translation/<language_code>/strings?details",
     statsMethodURL: prSlug + "stats/<language_code>/",
     languageURL: BASE_URL + "language/<language_code>/",
     languagesURL: BASE_URL + "languages/",

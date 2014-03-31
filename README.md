@@ -300,6 +300,18 @@ transifex.translationInstanceMethod("webmaker", "profile", "zh_CN", { mode: "rev
 
 **Note:** The responded content is not parsed.
 
+#### translationStringsMethod
+
+The `translationStringsMethod` function returns the requested translation strings, if they exists. The translation strings are returned as `json`.
+
+``` javascript
+transifex.translationStringsMethod("webmaker", "profile", "cs", function(err, data) {
+  ...
+});
+```
+
+**Note:** The returned content is not parsed.
+
 ### Statistics API
 
 #### statisticsMethods
