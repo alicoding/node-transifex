@@ -53,15 +53,17 @@ transifex.resourcesSetMethod(projectName, function(error, data) {
 
     var i = resources.length - 1;
     resources.forEach(function(resource) {
-      languages.teams.forEach(function(language) {
-
-        transifex.statisticsMethods(projectName, resource.slug, language, function(err, data) {
-          writeFile(path.join(language, "meta-" + resource.name + ".json"), JSON.stringify(data, null, 2), function( err ) {
+      transifex.statisticsMethods(projectName, resource.slug, function(err, data) {
+        // Write each file with the given filename and content.
+        Object.keys(data).forEach(function(language){
+          writeFile(path.join(language, "meta-" + resource.name + ".json"), JSON.stringify(data[language], null, 2), function( err ) {
             if (err) {
               throw new Error(err);
             }
           });
         });
+      });
+      languages.teams.forEach(function(language) {
         // Request the file for the specified locale then write the file
         transifex.translationInstanceMethod(projectName, resource.slug, language,
           function(err, fileContent, type) {
