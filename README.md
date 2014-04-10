@@ -1,6 +1,8 @@
 node-transifex
 =====================
 
+[![Build Status](https://travis-ci.org/alicoding/node-transifex.png)](https://travis-ci.org/alicoding/node-transifex)
+
 [Transifex](http://www.transifex.com) API client for nodejs
 
 Install the node.js module using npm:
@@ -377,7 +379,7 @@ The `languageStatisticsMethods` function returns the statistics for all the reso
 * reviewed_percentage: the percentage of entities that have been reviewed for the language.
 
 ``` javascript
-languageStatisticsMethods("es", function(err, data) {
+transifex.languageStatisticsMethods("es", function(err, data) {
   ...
 });
 ```

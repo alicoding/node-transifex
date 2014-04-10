@@ -3,6 +3,9 @@
   "version": "1.3.7",
   "description": "NodeJS Transifex API Client",
   "main": "./transifex.js",
+  "scripts": {
+    "test": "mocha --reporter spec tests --timeout 190000 --slow 2000"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/alicoding/node-transifex.git"
@@ -27,7 +30,9 @@
   "dependencies": {
     "commander": "~2.1.0",
     "lodash": "~2.4.1",
+    "mocha": "~1.15.1",
     "mkpath": "~0.1.0",
-    "request": "2.34.0"
+    "request": "2.34.0",
+    "should": "3.3.0"
   }
 }
