@@ -9,7 +9,6 @@ Install the node.js module using npm:
 
 `$ npm install transifex`
 
-
 Initialize the app with the `init()` with your credential and project name for the first time
 
 ``` javascript
