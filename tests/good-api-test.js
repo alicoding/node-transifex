@@ -11,13 +11,6 @@ describe("Good API Tests", function () {
   });
   describe("Project API", function () {
 
-    it("It should return list of projects in JSON format", function (done) {
-      transifex.projectSetMethods({ start: 1, end: 20 }, function(err, data) {
-
-        done();
-      });
-    });
-
     it("The projectInstanceMethods function should return details in JSON format", function (done) {
       should(function(){
         transifex.projectInstanceMethods("transifex", function(err, data) {
