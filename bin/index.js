@@ -55,6 +55,13 @@ transifex.resourcesSetMethod(projectName, function(error, data) {
     resources.forEach(function(resource) {
       languages.teams.forEach(function(language) {
 
+        transifex.statisticsMethods(projectName, resource.slug, language, function(err, data) {
+          writeFile(path.join(language, "meta-" + resource.name + ".json"), JSON.stringify(data, null, 2), function( err ) {
+            if (err) {
+              throw new Error(err);
+            }
+          });
+        });
         // Request the file for the specified locale then write the file
         transifex.translationInstanceMethod(projectName, resource.slug, language,
           function(err, fileContent, type) {
