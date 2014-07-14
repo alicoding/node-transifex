@@ -85,7 +85,7 @@ describe("Good API Tests", function () {
     it("languageInstanceMethod function returns JSON encoded string with option true", function (done) {
       should(function(){
         transifex.languageInstanceMethod("node-transifex-sample", "de", true, function(err, data) {
-          data.should.have.properties('coordinators', 'translators', 'reviewers', 'last_updated', 'total_segments', 'untranslated_segments');
+          data.should.have.properties('coordinators', 'translators', 'reviewers', 'total_segments', 'untranslated_segments');
           done();
         });
       }).not.throw();
@@ -94,7 +94,7 @@ describe("Good API Tests", function () {
     it("contributorListFor coordinators", function (done) {
       should(function(){
         transifex.contributorListFor("node-transifex-sample", "de", "coordinators", function(err, data) {
-          data.should.be.instanceOf(Array);
+          data.should.have.property('coordinators').and.containDeep([])
           done();
         });
       }).not.throw();
@@ -103,7 +103,7 @@ describe("Good API Tests", function () {
    it("contributorListFor reviewers", function (done) {
      should(function(){
        transifex.contributorListFor("node-transifex-sample", "de", "reviewers", function(err, data) {
-         data.should.be.instanceOf(Array);
+        data.should.have.property('reviewers').and.containDeep([])
          done();
        });
      }).not.throw();
@@ -112,7 +112,7 @@ describe("Good API Tests", function () {
    it("contributorListFor translators", function (done) {
      should(function(){
        transifex.contributorListFor("node-transifex-sample", "de", "translators", function(err, data) {
-         data.should.be.instanceOf(Array);
+        data.should.have.property('translators').and.containDeep([])
          done();
        });
      }).not.throw();
@@ -234,6 +234,7 @@ describe("Good API Tests", function () {
       should(function(){
         transifex.languageInstanceMethods("th_TH", function(err, data) {
           data.should.have.property("name", "Thai (Thailand)");
+          data.should.eql({  rtl: false, pluralequation: "language.pluralequation", code: "th_TH", name: "Thai (Thailand)", nplurals: 1});
           done();
         });
       }).not.throw();

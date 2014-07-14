@@ -240,10 +240,11 @@ transifex.contributorListFor("webmaker", "th_TH", "<type_of_contributor>", funct
 **Example**
 
 ```
-[
- 'glezos',
- 'kbairak'
-]
+{ coordinators: [
+    'glezos',
+    'kbairak'
+  ]
+}
 ```
 
 #### listOfContributors
@@ -488,10 +489,13 @@ transifex.languageInstanceMethods("th_TH", function(err, data) {
 
 **Example**
 ```
-{ pluralequation: '0',
-  code: 'th_TH',
-  name: 'Thai (Thailand)',
-  nplurals: 1 }
+{
+  rtl: false,
+  pluralequation: "language.pluralequation",
+  code: "th_TH",
+  name: "Thai (Thailand)",
+  nplurals: 1
+}
 ```
 
 #### languageSetMethods
