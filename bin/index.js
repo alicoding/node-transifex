@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 
-var transifex = require("../transifex"),
-    path = require('path'),
-    fs = require('fs'),
-    mkpath = require('mkpath');
+var Transifex   = require("../transifex"),
+    path        = require('path'),
+    fs          = require('fs'),
+    mkpath      = require('mkpath');
+
+var source_language = false,
+meta = false;
 
 // write files by the given path and locale
 function writeFile( relPath, strings, locale, callback ) {
@@ -23,72 +26,83 @@ function failed(err) {
 }
 
 function importFromTransifex(options) {
-// Retrieve all the data e.g. resource names, category names
-transifex.resourcesSetMethod(projectName, function(error, data) {
-  if ( error ) {
-    failed(error);
-  }
-
-  // Retrieve all the supported languages
-  transifex.projectInstanceMethods(projectName, function (error, languages) {
+  // Retrieve all the data e.g. resource names, category names
+  transifex.resourcesSetMethod(projectName, function(error, data) {
     if ( error ) {
       failed(error);
     }
 
-    // We are going to iterate through all the languages first before calling the function
-    var wait = languages.teams.length;
-
-    // Check if there is more than one resource with the same category
-    resources = data.filter(function(v) {
-      if(v.categories !== null) {
-        if(v.categories.indexOf(categoryName) !== -1) {
-          return true;
-        }
+    // Retrieve all the supported languages
+    transifex.projectInstanceMethods(projectName, function (error, languages) {
+      if ( error ) {
+        failed(error);
       }
-    });
+      if(!source_language) {
+        var position = languages.teams.indexOf(languages.source_language_code);
+        if ( ~position ) languages.teams.splice(position, 1);
+      }
 
-    if(!resources.length) {
-      failed("Error: Please check your category name");
-    }
+      // We are going to iterate through all the languages first before calling the function
+      var wait = languages.teams.length;
 
-    var i = resources.length - 1;
-    resources.forEach(function(resource) {
-      transifex.statisticsMethods(projectName, resource.slug, function(err, data) {
-        // Write each file with the given filename and content.
-        Object.keys(data).forEach(function(language){
-          writeFile(path.join(language, "meta-" + resource.name + ".json"), JSON.stringify(data[language], null, 2), function( err ) {
-            if (err) {
-              throw new Error(err);
-            }
-          });
-        });
+      // Check if there is more than one resource with the same category
+      resources = data.filter(function(v) {
+        if(v.categories !== null) {
+          if(v.categories.indexOf(categoryName) !== -1) {
+            return true;
+          }
+        }
       });
-      languages.teams.forEach(function(language) {
-        // Request the file for the specified locale then write the file
-        transifex.translationInstanceMethod(projectName, resource.slug, language,
-          function(err, fileContent, type) {
-            var filename = path.join(language, resource.name + "." + type);
-            wait--;
+
+      if(!resources.length) {
+        failed("Error: Please check your category name");
+      }
+
+      var i = resources.length - 1;
+      resources.forEach(function(resource) {
+        if(meta) {
+          transifex.statisticsMethods(projectName, resource.slug, function(err, data) {
             // Write each file with the given filename and content.
-            writeFile(filename, fileContent, function( err ) {
+            Object.keys(data).forEach(function(language){
+              writeFile(path.join(language, "meta-" + resource.name + ".json"), JSON.stringify(data[language], null, 2), function( err ) {
+                if (err) {
+                  throw new Error(err);
+                }
+              });
+            });
+          });
+        }
+
+        languages.teams.forEach(function(language) {
+          // Request the file for the specified locale then write the file
+          transifex.translationInstanceMethod(projectName, resource.slug, language,
+            function(err, fileContent, type) {
               if (err) {
                 throw new Error(err);
               }
-            });
-            if(wait === 0) {
-              i--;
-              wait = languages.teams.length;
-              if(i < 0) {
-                console.log("Transifex: Download completed");
-                process.exit(0);
+              var filename = path.join(language, resource.name + "." + type);
+              wait--;
+              // Write each file with the given filename and content.
+              writeFile(filename, fileContent, function( err ) {
+                if (err) {
+                  throw new Error(err);
+                }
+              });
+              if(wait === 0) {
+                i--;
+                wait = languages.teams.length;
+                if(i < 0) {
+                  console.log("Transifex: Download completed");
+                  process.exit(0);
+                }
               }
-            }
+          });
         });
       });
     });
   });
-});
 };
+
 function main() {
   var program = require('commander');
   program
@@ -96,6 +110,8 @@ function main() {
     .option('-p, --project <slug>', 'specify project slug')
     .option('-c, --category <name>', 'specify project category name')
     .option('-d, --dir <path>', 'locale dir for the downloaded files')
+    .option('-s, --source_language', 'override source_language (false by default)')
+    .option('-m, --meta', 'download meta info files (false by default)')
     .parse(process.argv);
   if (!program.credential) {
     failed("Bad Config - Please specify your Transifex's credential");
@@ -117,7 +133,13 @@ function main() {
   } else {
     dirName = program.dir;
   }
-  transifex.init({ credential: userAuth, project_slug: projectName });
+  if (program.source_language) {
+    source_language = true;;
+  }
+  if (program.meta) {
+    meta = true;
+  }
+  transifex = new Transifex({ credential: userAuth, project_slug: projectName });
   importFromTransifex(program);
 }
 
