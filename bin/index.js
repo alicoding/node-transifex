@@ -37,9 +37,10 @@ function importFromTransifex(options) {
       if ( error ) {
         failed(error);
       }
-      if(!source_language) {
-        var position = languages.teams.indexOf(languages.source_language_code);
-        if ( ~position ) languages.teams.splice(position, 1);
+
+      // if we select `-s` option then add source language to the list to download
+      if(source_language) {
+        languages.teams.push(languages.source_language_code);
       }
 
       // We are going to iterate through all the languages first before calling the function
