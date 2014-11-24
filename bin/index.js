@@ -38,9 +38,14 @@ function importFromTransifex(options) {
         failed(error);
       }
 
+      var index = languages.teams.indexOf(languages.source_language_code);
       // if we select `-s` option then add source language to the list to download
-      if(source_language) {
+      if(source_language && index < 0) {
         languages.teams.push(languages.source_language_code);
+      } else if (!source_language) {
+        if (index > -1) {
+            languages.teams.splice(index, 1);
+        }
       }
 
       // We are going to iterate through all the languages first before calling the function
@@ -135,7 +140,7 @@ function main() {
     dirName = program.dir;
   }
   if (program.source_language) {
-    source_language = true;;
+    source_language = true;
   }
   if (program.meta) {
     meta = true;
