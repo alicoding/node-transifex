@@ -14,7 +14,7 @@ Initialize the module with your credential and project name for the first time
 ``` javascript
 var Transifex = require("transifex");
 
-var transifex = new Trasifex({
+var transifex = new Transifex({
 	project_slug: "projectName",
 	credential: "user:pass" // In the same format
 });
