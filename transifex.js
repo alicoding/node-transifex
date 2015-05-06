@@ -24,7 +24,10 @@ Transifex.prototype.projectRequest = function(url, options, callback) {
       return callback(error);
     }
     if (response.statusCode !== 200) {
-      return callback(Error(url + " returned " + response.statusCode));
+      var responseError = new Error(url + " returned " + response.statusCode);
+      responseError.response = response;
+
+      return callback(responseError);
     }
     if(response.headers['content-disposition']) {
       var str = response.headers['content-disposition'];
