@@ -39,16 +39,11 @@ Transifex.prototype.projectRequest = function(url, options, callback) {
 };
 
 // send data (POST) to project on the url provided
-Transifex.prototype.projectPostRequest = function(url, options, callback) {
+Transifex.prototype.projectPostRequest = function(url, data, callback) {
   var fileTypeContent;
   // Allow calling with or without options.
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
-  } else {
-    callback = callback || function(){};
-  }
-  request.post({ url: url, qs: options, headers: { "Authorization": this.authHeader } },
+  callback = callback || function(){};
+  request.post({ url: url, body: JSON.stringify(data), headers: { "Authorization": this.authHeader }, json: true },
     function(error, response, body) {
     if (error) {
       return callback(error);
@@ -209,8 +204,7 @@ Transifex.prototype.projectInstanceMethods = function(project_slug, callback) {
 Transifex.prototype.resourceCreateMethod = function(project_slug, form, callback) {
   project_slug = project_slug || this.projectSlug || "webmaker";
   var url = this.expUrl.projectResources.replace("<project_slug>", project_slug);
-  var options = {form: form};
-  this.projectPostRequest(url, options, function(err, resources) {
+  this.projectPostRequest(url, form, function(err, resources) {
     if (err) {
       return callback(err);
     }
