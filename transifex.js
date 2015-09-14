@@ -43,7 +43,7 @@ Transifex.prototype.projectPostRequest = function(url, data, callback) {
   var fileTypeContent;
   // Allow calling with or without options.
   callback = callback || function(){};
-  request.post({ url: url, body: JSON.stringify(data), headers: { "Authorization": this.authHeader }, json: true },
+  request.post({ url: url, body: JSON.stringify(data), headers: { "Authorization": this.authHeader, 'content-type': 'application/json' }, json: true },
     function(error, response, body) {
     if (error) {
       return callback(error);
