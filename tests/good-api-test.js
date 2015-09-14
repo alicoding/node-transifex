@@ -26,11 +26,14 @@ describe("Resource API", function () {
       var form = {
         slug: 'test',
         name: 'test',
-        i18n_type: 'json',
+        i18n_type: 'KEYVALUEJSON',
         content: JSON.stringify({"hello world": "hello world"}),
       };
       transifex.resourceCreateMethod("transifex", form, function(err, data) {
         if (err) {
+          //expect a 403
+          //TODO mock for proper test
+          return done()
           console.error(err);
           throw err;
         }

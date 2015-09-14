@@ -48,7 +48,7 @@ Transifex.prototype.projectPostRequest = function(url, data, callback) {
     if (error) {
       return callback(error);
     }
-    if (response.statusCode !== 200) {
+    if (response.statusCode < 200 || response.statusCode > 299) {
       var responseError = new Error(url + " returned " + response.statusCode);
       responseError.response = response;
 
@@ -267,6 +267,19 @@ Transifex.prototype.sourceLanguageMethods = function(project_slug, resource_slug
   var url = this.expUrl.projectResourceFile.replace("<project_slug>", project_slug)
   .replace("<resource_slug>", resource_slug);
   this.projectRequest(url, function(err, fileContent) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, fileContent);
+  });
+};
+
+Transifex.prototype.uploadSourceLanguageMethod = function(project_slug, resource_slug, content, callback) {
+  project_slug = project_slug || this.projectSlug || "webmaker";
+  resource_slug = resource_slug || this.projectSlug || "webmaker";
+  var url = this.expUrl.projectResourceContent.replace("<project_slug>", project_slug)
+  .replace("<resource_slug>", resource_slug);
+  this.projectPostRequest(url, content, function(err, fileContent) {
     if (err) {
       return callback(err);
     }

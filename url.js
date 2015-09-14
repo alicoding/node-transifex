@@ -9,6 +9,7 @@ module.exports = function ( projectName ) {
     projectInstanceAPI: BASEP_URL + "<project_slug>/?details",
     projectResources: BASEP_URL + "<project_slug>/resources/",
     projectResource: prSlug + "?details",
+    projectResourceContent: prSlug + "content/",
     projectResourceFile: prSlug + "content/?file",
     languageSetURL: BASEP_URL + "<project_slug>/languages/",
     languageInstanceURL: plSlug + "?details",
