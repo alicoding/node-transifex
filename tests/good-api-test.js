@@ -21,6 +21,25 @@ describe("Project API", function () {
 
 describe("Resource API", function () {
 
+  it("The resourceCreateMethod function returns JSON-encoded detail", function (done) {
+    should(function(){
+      var form = {
+        slug: 'test',
+        name: 'test',
+        i18n_type: 'json',
+        content: JSON.stringify({"hello world": "hello world"}),
+      };
+      transifex.resourceCreateMethod("transifex", form, function(err, data) {
+        if (err) {
+          console.error(err);
+          throw err;
+        }
+        data.should.match(function(it) { return it[0].should.have.properties('name'); });
+        done();
+      });
+    }).not.throw();
+  });
+
   it("The resourcesSetMethod function returns JSON-encoded list with details", function (done) {
     should(function(){
       transifex.resourcesSetMethod("transifex", function(err, data) {
@@ -256,4 +275,3 @@ describe("Language Info API", function () {
   });
 
 });
-

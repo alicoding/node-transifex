@@ -38,6 +38,36 @@ Transifex.prototype.projectRequest = function(url, options, callback) {
   });
 };
 
+// send data (POST) to project on the url provided
+Transifex.prototype.projectPostRequest = function(url, options, callback) {
+  var fileTypeContent;
+  // Allow calling with or without options.
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  } else {
+    callback = callback || function(){};
+  }
+  request.post({ url: url, qs: options, headers: { "Authorization": this.authHeader } },
+    function(error, response, body) {
+    if (error) {
+      return callback(error);
+    }
+    if (response.statusCode !== 200) {
+      var responseError = new Error(url + " returned " + response.statusCode);
+      responseError.response = response;
+
+      return callback(responseError);
+    }
+    if(response.headers['content-disposition']) {
+      var str = response.headers['content-disposition'];
+      fileTypeContent = str.substring(str.lastIndexOf(".")).match(/\w+/);
+      fileTypeContent = fileTypeContent[0] || null;
+    }
+    callback(null, body, fileTypeContent);
+  });
+};
+
 Transifex.prototype.projectStatisticsMethods = function(callback) {
   var that = this;
   this.resourcesSetMethod(this.projectSlug, function(error, data) {
@@ -175,6 +205,23 @@ Transifex.prototype.projectInstanceMethods = function(project_slug, callback) {
 /*
 * RESOURCE API
 */
+
+Transifex.prototype.resourceCreateMethod = function(project_slug, form, callback) {
+  project_slug = project_slug || this.projectSlug || "webmaker";
+  var url = this.expUrl.projectResources.replace("<project_slug>", project_slug);
+  var options = {form: form};
+  this.projectPostRequest(url, options, function(err, resources) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      resources = JSON.parse(resources);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, resources);
+  });
+};
 
 Transifex.prototype.resourcesSetMethod = function(project_slug, callback) {
   project_slug = project_slug || this.projectSlug || "webmaker";
