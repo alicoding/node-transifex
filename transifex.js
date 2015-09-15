@@ -43,7 +43,7 @@ Transifex.prototype.projectPostRequest = function(url, data, callback) {
   var fileTypeContent;
   // Allow calling with or without options.
   callback = callback || function(){};
-  request.post({ url: url, body: JSON.stringify(data), headers: { "Authorization": this.authHeader, 'content-type': 'application/json' }, json: true },
+  request.post({ url: url, body: JSON.stringify(data), headers: { "Authorization": this.authHeader, 'content-type': 'application/json' }},
     function(error, response, body) {
     if (error) {
       return callback(error);
@@ -68,7 +68,7 @@ Transifex.prototype.projectPutRequest = function(url, data, callback) {
   var fileTypeContent;
   // Allow calling with or without options.
   callback = callback || function(){};
-  request.put({ url: url, body: JSON.stringify(data), headers: { "Authorization": this.authHeader, 'content-type': 'application/json' }, json: true },
+  request.put({ url: url, body: JSON.stringify(data), headers: { "Authorization": this.authHeader, 'content-type': 'application/json' }},
     function(error, response, body) {
     if (error) {
       return callback(error);

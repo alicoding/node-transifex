@@ -1,4 +1,5 @@
 var should = require('should');
+var nock = require('nock');
 var Transifex = require('../transifex');
 
 transifex = new Transifex({
@@ -20,9 +21,16 @@ describe("Project API", function () {
 });
 
 describe("Resource API", function () {
+  afterEach(function() {
+    nock.cleanAll();
+  });
 
-  it("The resourceCreateMethod function returns JSON-encoded detail", function (done) {
+  it("The resourceCreateMethod function posts and returns JSON", function (done) {
     should(function(){
+      nock("https://www.transifex.com")
+        .post("/api/2/project/transifex/resources/")
+        .reply(201, '[0, 1, 0]');
+
       var form = {
         slug: 'test',
         name: 'test',
@@ -30,14 +38,8 @@ describe("Resource API", function () {
         content: JSON.stringify({"hello world": "hello world"}),
       };
       transifex.resourceCreateMethod("transifex", form, function(err, data) {
-        if (err) {
-          //expect a 403
-          //TODO mock for proper test
-          return done()
-          console.error(err);
-          throw err;
-        }
-        data.should.match(function(it) { return it[0].should.have.properties('name'); });
+        should.ifError(err);
+        data.should.not.be.empty;
         done();
       });
     }).not.throw();
@@ -73,6 +75,23 @@ describe("Resource API", function () {
   it("The sourceLanguageMethods function should return content of the translation file", function (done) {
     should(function(){
       transifex.sourceLanguageMethods("node-transifex-sample", "source-file", function(err, data) {
+        data.should.not.be.empty;
+        done();
+      });
+    }).not.throw();
+  });
+
+  it("The uploadSourceLanguageMethod function puts source message", function (done) {
+    should(function(){
+      nock("https://www.transifex.com")
+        .put("/api/2/project/transifex/resource/sample/content/")
+        .reply(201, '[0, 1, 0]');
+
+      var form = {
+        content: JSON.stringify({"hello world": "hello world"}),
+      };
+      transifex.uploadSourceLanguageMethod("transifex", "sample", form, function(err, data) {
+        should.ifError(err);
         data.should.not.be.empty;
         done();
       });
