@@ -85,14 +85,19 @@ describe("Resource API", function () {
     should(function(){
       nock("https://www.transifex.com")
         .put("/api/2/project/transifex/resource/sample/content/")
-        .reply(201, '[0, 1, 0]');
+        .reply(201, {
+           "strings_added": 0,
+           "strings_updated": 0,
+           "strings_delete": 0,
+           "redirect": "/transifex/transifex/sample/"
+      });
 
       var form = {
         content: JSON.stringify({"hello world": "hello world"}),
       };
       transifex.uploadSourceLanguageMethod("transifex", "sample", form, function(err, data) {
         should.ifError(err);
-        data.should.not.be.empty;
+        data.should.have.properties('strings_added', 'strings_updated', 'strings_delete', 'redirect');
         done();
       });
     }).not.throw();

@@ -304,11 +304,16 @@ Transifex.prototype.uploadSourceLanguageMethod = function(project_slug, resource
   resource_slug = resource_slug || this.projectSlug || "webmaker";
   var url = this.expUrl.projectResourceContent.replace("<project_slug>", project_slug)
   .replace("<resource_slug>", resource_slug);
-  this.projectPutRequest(url, content, function(err, fileContent) {
+  this.projectPutRequest(url, content, function(err, status) {
     if (err) {
       return callback(err);
     }
-    callback(null, fileContent);
+    try {
+      status = JSON.parse(status);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, status);
   });
 };
 
