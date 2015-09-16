@@ -34,5 +34,8 @@
     "mocha": "~1.15.1",
     "request": "2.34.0",
     "should": "3.3.0"
+  },
+  "devDependencies": {
+    "nock": "^2.11.0"
   }
 }

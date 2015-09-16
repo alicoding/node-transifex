@@ -1,4 +1,5 @@
 var should = require('should');
+var nock = require('nock');
 var Transifex = require('../transifex');
 
 transifex = new Transifex({
@@ -20,6 +21,29 @@ describe("Project API", function () {
 });
 
 describe("Resource API", function () {
+  afterEach(function() {
+    nock.cleanAll();
+  });
+
+  it("The resourceCreateMethod function posts and returns JSON", function (done) {
+    should(function(){
+      nock("https://www.transifex.com")
+        .post("/api/2/project/transifex/resources/")
+        .reply(201, '[0, 1, 0]');
+
+      var form = {
+        slug: 'test',
+        name: 'test',
+        i18n_type: 'KEYVALUEJSON',
+        content: JSON.stringify({"hello world": "hello world"}),
+      };
+      transifex.resourceCreateMethod("transifex", form, function(err, data) {
+        should.ifError(err);
+        data.should.not.be.empty;
+        done();
+      });
+    }).not.throw();
+  });
 
   it("The resourcesSetMethod function returns JSON-encoded list with details", function (done) {
     should(function(){
@@ -52,6 +76,28 @@ describe("Resource API", function () {
     should(function(){
       transifex.sourceLanguageMethods("node-transifex-sample", "source-file", function(err, data) {
         data.should.not.be.empty;
+        done();
+      });
+    }).not.throw();
+  });
+
+  it("The uploadSourceLanguageMethod function puts source message", function (done) {
+    should(function(){
+      nock("https://www.transifex.com")
+        .put("/api/2/project/transifex/resource/sample/content/")
+        .reply(201, {
+           "strings_added": 0,
+           "strings_updated": 0,
+           "strings_delete": 0,
+           "redirect": "/transifex/transifex/sample/"
+      });
+
+      var form = {
+        content: JSON.stringify({"hello world": "hello world"}),
+      };
+      transifex.uploadSourceLanguageMethod("transifex", "sample", form, function(err, data) {
+        should.ifError(err);
+        data.should.have.properties('strings_added', 'strings_updated', 'strings_delete', 'redirect');
         done();
       });
     }).not.throw();
@@ -256,4 +302,3 @@ describe("Language Info API", function () {
   });
 
 });
-

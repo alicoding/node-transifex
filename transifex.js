@@ -38,6 +38,56 @@ Transifex.prototype.projectRequest = function(url, options, callback) {
   });
 };
 
+// send data (POST) to project on the url provided
+Transifex.prototype.projectPostRequest = function(url, data, callback) {
+  var fileTypeContent;
+  // Allow calling with or without options.
+  callback = callback || function(){};
+  request.post({ url: url, body: JSON.stringify(data), headers: { "Authorization": this.authHeader, 'content-type': 'application/json' }},
+    function(error, response, body) {
+    if (error) {
+      return callback(error);
+    }
+    if (response.statusCode < 200 || response.statusCode > 299) {
+      var responseError = new Error(url + " returned " + response.statusCode);
+      responseError.response = response;
+
+      return callback(responseError);
+    }
+    if(response.headers['content-disposition']) {
+      var str = response.headers['content-disposition'];
+      fileTypeContent = str.substring(str.lastIndexOf(".")).match(/\w+/);
+      fileTypeContent = fileTypeContent[0] || null;
+    }
+    callback(null, body, fileTypeContent);
+  });
+};
+
+// send data (PUT) to project on the url provided
+Transifex.prototype.projectPutRequest = function(url, data, callback) {
+  var fileTypeContent;
+  // Allow calling with or without options.
+  callback = callback || function(){};
+  request.put({ url: url, body: JSON.stringify(data), headers: { "Authorization": this.authHeader, 'content-type': 'application/json' }},
+    function(error, response, body) {
+    if (error) {
+      return callback(error);
+    }
+    if (response.statusCode < 200 || response.statusCode > 299) {
+      var responseError = new Error(url + " returned " + response.statusCode);
+      responseError.response = response;
+
+      return callback(responseError);
+    }
+    if(response.headers['content-disposition']) {
+      var str = response.headers['content-disposition'];
+      fileTypeContent = str.substring(str.lastIndexOf(".")).match(/\w+/);
+      fileTypeContent = fileTypeContent[0] || null;
+    }
+    callback(null, body, fileTypeContent);
+  });
+};
+
 Transifex.prototype.projectStatisticsMethods = function(callback) {
   var that = this;
   this.resourcesSetMethod(this.projectSlug, function(error, data) {
@@ -176,6 +226,22 @@ Transifex.prototype.projectInstanceMethods = function(project_slug, callback) {
 * RESOURCE API
 */
 
+Transifex.prototype.resourceCreateMethod = function(project_slug, form, callback) {
+  project_slug = project_slug || this.projectSlug || "webmaker";
+  var url = this.expUrl.projectResources.replace("<project_slug>", project_slug);
+  this.projectPostRequest(url, form, function(err, resources) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      resources = JSON.parse(resources);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, resources);
+  });
+};
+
 Transifex.prototype.resourcesSetMethod = function(project_slug, callback) {
   project_slug = project_slug || this.projectSlug || "webmaker";
   var url = this.expUrl.projectResources.replace("<project_slug>", project_slug);
@@ -230,6 +296,24 @@ Transifex.prototype.sourceLanguageMethods = function(project_slug, resource_slug
       return callback(err);
     }
     callback(null, fileContent);
+  });
+};
+
+Transifex.prototype.uploadSourceLanguageMethod = function(project_slug, resource_slug, content, callback) {
+  project_slug = project_slug || this.projectSlug || "webmaker";
+  resource_slug = resource_slug || this.projectSlug || "webmaker";
+  var url = this.expUrl.projectResourceContent.replace("<project_slug>", project_slug)
+  .replace("<resource_slug>", resource_slug);
+  this.projectPutRequest(url, content, function(err, status) {
+    if (err) {
+      return callback(err);
+    }
+    try {
+      status = JSON.parse(status);
+    } catch (e) {
+      return callback(e);
+    }
+    callback(null, status);
   });
 };
 
