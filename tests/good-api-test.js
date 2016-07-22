@@ -234,6 +234,7 @@ describe("Translations API", function () {
         try {
           data = JSON.parse(data);
           data[0].should.have.properties('comment', 'context', 'tags', 'source_string', 'translation', 'last_update');
+          data.length.should.be.equal(1);
           data[0].translation.should.be.equal("Das ist cool. Super cool!");
         } catch(e) {
           done();
