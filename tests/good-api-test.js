@@ -216,7 +216,7 @@ describe("Translations API", function () {
 
   it("translationStringsMethod", function (done) {
     should(function(){
-      transifex.translationStringsMethod("node-transifex-sample", "source-file", "de", function(err, data) {
+      transifex.translationStringsMethod("node-transifex-sample", "source-file", "de", "test", function(err, data) {
         try {
           data = JSON.parse(data);
           data[0].should.have.properties('comment', 'context', 'tags', 'source_string', 'translation', 'last_update');
