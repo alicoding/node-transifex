@@ -228,6 +228,21 @@ describe("Translations API", function () {
     }).not.throw();
   });
 
+  it("translationStringsMethod specific string", function (done) {
+    should(function(){
+      transifex.translationStringsMethod("node-transifex-sample", "source-file", "de", "This is cool. Super Cool!", function(err, data) {
+        try {
+          data = JSON.parse(data);
+          data[0].should.have.properties('comment', 'context', 'tags', 'source_string', 'translation', 'last_update');
+          data[0].translation.should.be.equal("Das ist cool. Super cool!");
+        } catch(e) {
+          done();
+        }
+        done();
+      });
+    }).not.throw();
+  });
+
 });
 
 describe("Statistics API", function () {
