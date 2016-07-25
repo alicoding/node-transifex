@@ -305,9 +305,10 @@ transifex.translationInstanceMethod("webmaker", "profile", "zh_CN", { mode: "rev
 #### translationStringsMethod
 
 The `translationStringsMethod` function returns the requested translation strings, if they exists. The translation strings are returned as `json`.
+The `string-to-translate` parameter is optional. If this is not provided, the request will return all strings for the specified language code.
 
 ``` javascript
-transifex.translationStringsMethod("webmaker", "profile", "cs", function(err, data) {
+transifex.translationStringsMethod("webmaker", "profile", "cs", "string-to-translate", function(err, data) {
   ...
 });
 ```
