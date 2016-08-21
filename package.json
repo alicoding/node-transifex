@@ -24,7 +24,6 @@
     "node transifex",
     "transifex API"
   ],
-  "preferGlobal": true,
   "author": "Ali Al Dallal <ali@alicoding.com>",
   "license": "MIT",
   "dependencies": {
