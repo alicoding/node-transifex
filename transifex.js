@@ -63,6 +63,31 @@ Transifex.prototype.projectPostRequest = function(url, data, callback) {
   });
 };
 
+// send DELETE to project on the url provided
+Transifex.prototype.projectDeleteRequest = function(url, callback) {
+  var fileTypeContent;
+  // Allow calling with or without options.
+  callback = callback || function(){};
+  request.del({ url: url, headers: { "Authorization": this.authHeader }},
+    function(error, response, body) {
+    if (error) {
+      return callback(error);
+    }
+    if (response.statusCode < 200 || response.statusCode > 299) {
+      var responseError = new Error(url + " returned " + response.statusCode);
+      responseError.response = response;
+
+      return callback(responseError);
+    }
+    if(response.headers['content-disposition']) {
+      var str = response.headers['content-disposition'];
+      fileTypeContent = str.substring(str.lastIndexOf(".")).match(/\w+/);
+      fileTypeContent = fileTypeContent[0] || null;
+    }
+    callback(null, body, fileTypeContent);
+  });
+};
+
 // send data (PUT) to project on the url provided
 Transifex.prototype.projectPutRequest = function(url, data, callback) {
   var fileTypeContent;
