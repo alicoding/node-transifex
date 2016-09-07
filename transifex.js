@@ -267,10 +267,10 @@ Transifex.prototype.resourceCreateMethod = function(project_slug, form, callback
   });
 };
 
-Transifex.prototype.resourceDeleteMethod = function(project_slug, form, callback) {
+Transifex.prototype.resourceDeleteMethod = function(project_slug, resource_slug, callback) {
   project_slug = project_slug || this.projectSlug || "webmaker";
   resource_slug = resource_slug || this.projectSlug || "webmaker";
-  var url = this.expUrl.projectResourceFile.replace("<project_slug>", project_slug)
+  var url = this.expUrl.projectResource.replace("<project_slug>", project_slug)
   .replace("<resource_slug>", resource_slug);
   this.projectDeleteRequest(url, function(err, fileContent) {
     if (err) {
