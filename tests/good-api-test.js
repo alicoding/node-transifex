@@ -45,7 +45,7 @@ describe("Resource API", function () {
     }).not.throw();
   });
 
-  it("The resourceDeleteMethod function posts and returns JSON", function (done) {
+  it("The resourceDeleteMethod function returns no content", function (done) {
     should(function(){
 
       nock("https://www.transifex.com")
