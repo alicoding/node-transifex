@@ -53,7 +53,7 @@ describe("Resource API", function () {
         .reply(204);
 
       transifex.resourceDeleteMethod("transifex", "test", function(err, data) {
-		data.should.be.empty;
+        data.should.be.empty;
         done();
       });
     }).not.throw();
