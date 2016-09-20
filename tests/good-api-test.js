@@ -45,6 +45,20 @@ describe("Resource API", function () {
     }).not.throw();
   });
 
+  it("The resourceDeleteMethod function returns no content", function (done) {
+    should(function(){
+
+      nock("https://www.transifex.com")
+        .delete("/api/2/project/transifex/resource/test/?details")
+        .reply(204);
+
+      transifex.resourceDeleteMethod("transifex", "test", function(err, data) {
+        data.should.be.empty;
+        done();
+      });
+    }).not.throw();
+  });
+
   it("The resourcesSetMethod function returns JSON-encoded list with details", function (done) {
     should(function(){
       transifex.resourcesSetMethod("transifex", function(err, data) {
