@@ -419,6 +419,25 @@ Transifex.prototype.translationInstanceMethod = function(project_slug, resource_
   });
 };
 
+Transifex.prototype.uploadTranslationInstanceMethod = function(project_slug, resource_slug, language_code, type, callback) {
+  // Allow calling with or without options.
+  if (typeof type === 'function') {
+    callback = type;
+    type = {};
+  } else {
+    callback = callback || function(){};
+  }
+  project_slug = project_slug || this.projectSlug || "webmaker";
+  var url = this.expUrl.translationMethodURL.replace("<project_slug>", project_slug)
+  .replace("<resource_slug>", resource_slug).replace("<language_code>", language_code);
+  this.projectPutRequest(url, type, function(err, content, type) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, content, type);
+  });
+};
+
 
 Transifex.prototype.translationStringsMethod = function(project_slug, resource_slug, language_code, string_key, callback) {
   project_slug = project_slug || this.projectSlug || "webmaker";
