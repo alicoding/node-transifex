@@ -63,6 +63,31 @@ Transifex.prototype.projectPostRequest = function(url, data, callback) {
   });
 };
 
+// send DELETE to project on the url provided
+Transifex.prototype.projectDeleteRequest = function(url, callback) {
+  var fileTypeContent;
+  // Allow calling with or without options.
+  callback = callback || function(){};
+  request.del({ url: url, headers: { "Authorization": this.authHeader }},
+    function(error, response, body) {
+    if (error) {
+      return callback(error);
+    }
+    if (response.statusCode < 200 || response.statusCode > 299) {
+      var responseError = new Error(url + " returned " + response.statusCode);
+      responseError.response = response;
+
+      return callback(responseError);
+    }
+    if(response.headers['content-disposition']) {
+      var str = response.headers['content-disposition'];
+      fileTypeContent = str.substring(str.lastIndexOf(".")).match(/\w+/);
+      fileTypeContent = fileTypeContent[0] || null;
+    }
+    callback(null, body, fileTypeContent);
+  });
+};
+
 // send data (PUT) to project on the url provided
 Transifex.prototype.projectPutRequest = function(url, data, callback) {
   var fileTypeContent;
@@ -239,6 +264,19 @@ Transifex.prototype.resourceCreateMethod = function(project_slug, form, callback
       return callback(e);
     }
     callback(null, resources);
+  });
+};
+
+Transifex.prototype.resourceDeleteMethod = function(project_slug, resource_slug, callback) {
+  project_slug = project_slug || this.projectSlug || "webmaker";
+  resource_slug = resource_slug || this.projectSlug || "webmaker";
+  var url = this.expUrl.projectResource.replace("<project_slug>", project_slug)
+  .replace("<resource_slug>", resource_slug);
+  this.projectDeleteRequest(url, function(err, fileContent) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, fileContent);
   });
 };
 
