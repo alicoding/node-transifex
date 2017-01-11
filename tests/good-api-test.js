@@ -95,6 +95,28 @@ describe("Resource API", function () {
     }).not.throw();
   });
 
+  it("The uploadSourceLanguageMethod function puts source message", function (done) {
+    should(function(){
+      nock("https://www.transifex.com")
+        .put("/api/2/project/transifex/resource/sample/content/")
+        .reply(201, {
+           "strings_added": 0,
+           "strings_updated": 0,
+           "strings_delete": 0,
+           "redirect": "/transifex/transifex/sample/"
+      });
+
+      var form = {
+        content: JSON.stringify({"hello world": "hello world"}),
+      };
+      transifex.uploadSourceLanguageMethod("transifex", "sample", form, function(err, data) {
+        should.ifError(err);
+        data.should.have.properties('strings_added', 'strings_updated', 'strings_delete', 'redirect');
+        done();
+      });
+    }).not.throw();
+  });
+
 });
 
 describe("Language API", function () {
@@ -236,7 +258,7 @@ describe("Translations API", function () {
     }).not.throw();
   });
 
-  it("The uploadSourceLanguageMethod function puts source message", function (done) {
+  it("The uploadTranslationInstanceMethod function puts translation content", function (done) {
     should(function(){
       nock("https://www.transifex.com")
         .put("/api/2/project/transifex/resource/sample/translation/es/")
@@ -254,7 +276,7 @@ describe("Translations API", function () {
         content: JSON.stringify({"hello world": "hello world"}),
       };
 
-      transifex.uploadSourceLanguageMethod("transifex", "sample", "es", content, function(err, data) {
+      transifex.uploadTranslationInstanceMethod("transifex", "sample", "es", content, function(err, data) {
         data.should.have.properties('strings_added', 'strings_updated', 'strings_delete', 'redirect');
         done();
       });
