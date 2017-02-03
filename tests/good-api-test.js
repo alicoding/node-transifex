@@ -187,6 +187,9 @@ it("listOfContributors function should return list of array with all contributor
 });
 
 describe("Translations API", function () {
+  afterEach(function() {
+    nock.cleanAll();
+  });
 
   it("translationInstanceMethod with no option", function (done) {
     should(function(){
@@ -277,7 +280,8 @@ describe("Translations API", function () {
       };
 
       transifex.uploadTranslationInstanceMethod("transifex", "sample", "es", content, function(err, data) {
-        data.should.have.properties('strings_added', 'strings_updated', 'strings_delete', 'redirect');
+		parsedData = JSON.parse(data);
+        parsedData.should.have.properties('strings_added', 'strings_updated', 'strings_delete', 'redirect');
         done();
       });
     }).not.throw();
