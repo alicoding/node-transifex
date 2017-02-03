@@ -460,7 +460,7 @@ Transifex.prototype.translationInstanceMethod = function(project_slug, resource_
 Transifex.prototype.uploadTranslationInstanceMethod = function(project_slug, resource_slug, language_code, content, callback) {
   project_slug = project_slug || this.projectSlug || "webmaker";
   callback = callback || function(){};
-  var url = this.expUrl.translationMethodNoFileURL.replace("<project_slug>", project_slug)
+  var url = this.expUrl.translationMethodURL.replace("<project_slug>", project_slug)
   .replace("<resource_slug>", resource_slug).replace("<language_code>", language_code);
   this.projectPutRequest(url, content, function(err, content) {
     if (err) {
