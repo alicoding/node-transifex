@@ -264,7 +264,7 @@ describe("Translations API", function () {
   it("The uploadTranslationInstanceMethod function puts translation content", function (done) {
     should(function(){
       nock("https://www.transifex.com")
-        .put("/api/2/project/transifex/resource/sample/translation/es/")
+        .put("/api/2/project/transifex/resource/sample/translation/es/?file")
         .reply(201, {
            "strings_added": 1,
            "strings_updated": 0,
@@ -280,7 +280,7 @@ describe("Translations API", function () {
       };
 
       transifex.uploadTranslationInstanceMethod("transifex", "sample", "es", content, function(err, data) {
-		parsedData = JSON.parse(data);
+        parsedData = JSON.parse(data);
         parsedData.should.have.properties('strings_added', 'strings_updated', 'strings_delete', 'redirect');
         done();
       });
