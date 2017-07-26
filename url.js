@@ -4,6 +4,7 @@ module.exports = function ( projectName ) {
   const projectUrl = BASEP_URL + projectName + "/";
   const prSlug = BASEP_URL + "<project_slug>/resource/<resource_slug>/";
   const plSlug = BASEP_URL + "<project_slug>/language/<language_code>/";
+  const translationUrlBase = prSlug + "translation/<language_code>/";
 
   var API = {
     projectInstanceAPI: BASEP_URL + "<project_slug>/?details",
@@ -14,8 +15,10 @@ module.exports = function ( projectName ) {
     languageSetURL: BASEP_URL + "<project_slug>/languages/",
     languageInstanceURL: plSlug + "?details",
     contributorForURL: plSlug + "<type>/",
-    translationMethodURL: prSlug + "translation/<language_code>/?file",
-    translationStringsURL: prSlug + "translation/<language_code>/strings/?details<string_key>",
+    translationUrlBase: prSlug + "translation/<language_code>/",
+    translationMethodURL:  translationUrlBase + "?file",
+    translationStringsPutURL: translationUrlBase + "strings/",
+    translationStringsURL: translationUrlBase + "strings/?details<string_key>",
     statsMethodURL: prSlug + "stats/<language_code>/",
     languageURL: BASE_URL + "language/<language_code>/",
     languagesURL: BASE_URL + "languages/",
