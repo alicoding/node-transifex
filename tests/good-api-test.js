@@ -282,6 +282,32 @@ describe("Translations API", function () {
     }).not.throw();
   });
 
+  it("The uploadTranslationInstanceMethod function puts translation content", function (done) {
+    should(function(){
+      nock("https://www.transifex.com")
+        .put("/api/2/project/transifex/resource/sample/translation/es/?file")
+        .reply(201, {
+           "strings_added": 1,
+           "strings_updated": 0,
+           "strings_delete": 0,
+           "redirect": "/transifex/transifex/sample/"
+      });
+
+      var content = {
+        slug: 'sample',
+        name: 'sample',
+        i18n_type: 'KEYVALUEJSON',
+        content: JSON.stringify({"hello world": "hello world"}),
+      };
+
+      transifex.uploadTranslationInstanceMethod("transifex", "sample", "es", content, function(err, data) {
+        parsedData = JSON.parse(data);
+        parsedData.should.have.properties('strings_added', 'strings_updated', 'strings_delete', 'redirect');
+        done();
+      });
+    }).not.throw();
+  });
+
 });
 
 describe("Statistics API", function () {
