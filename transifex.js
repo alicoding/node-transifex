@@ -1,5 +1,6 @@
 var request = require("request"),
-    _ = require("lodash");
+    _ = require("lodash"),
+    crypto = require('crypto');
 
 function Transifex(options) {
   this.projectSlug = options.project_slug || "webmaker";
@@ -486,6 +487,28 @@ Transifex.prototype.translationStringsMethod = function(project_slug, resource_s
   });
 };
 
+// takes objects with a key property, calculates and returns object with source_entity_hash instead
+const keyToHash = translationStringObj => {
+  // adding colon, ignoring context use case - https://docs.transifex.com/api/translation-strings#identifying-strings-using-hashes
+  translationStringObj.source_entity_hash = crypto.createHash('md5').update(translationStringObj.key + ":").digest("hex");
+  delete translationStringObj.key;
+
+  return translationStringObj;
+};
+
+Transifex.prototype.translationStringsPutMethod = function(project_slug, resource_slug, language_code, content, callback) {
+  project_slug = project_slug || this.projectSlug || "webmaker";
+  var url = this.expUrl.translationStringsPutURL.replace("<project_slug>", project_slug)
+                                        .replace("<resource_slug>", resource_slug)
+                                        .replace("<language_code>", language_code);
+  console.log('url',url);
+  this.projectPutRequest(url, content.map(keyToHash), function(err, content) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, content);
+  });
+};
 /*
 * END TRANSLATIONS API
 */

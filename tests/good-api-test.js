@@ -261,6 +261,27 @@ describe("Translations API", function () {
     }).not.throw();
   });
 
+  it("translationStringsPutMethod specific string", function (done) {
+    should(function(){
+      const content = [{ key: "This is cool. Super Cool!", translation: "Das ist cool. Super cool!"}];
+      nock("https://www.transifex.com")
+        .put("/api/2/project/node-transifex-sample/resource/source-file/translation/de/strings/")
+        .reply(201, content);
+
+      transifex.translationStringsPutMethod("node-transifex-sample", "source-file", "de", content, function(err, data) {
+        try {
+          data = JSON.parse(data);
+          data.length.should.be.equal(1);
+          data[0].translation.should.be.equal("Das ist cool. Super cool!");
+        } catch(e) {
+          console.log(e);
+          done();
+        }
+        done();
+      });
+    }).not.throw();
+  });
+
   it("The uploadTranslationInstanceMethod function puts translation content", function (done) {
     should(function(){
       nock("https://www.transifex.com")
