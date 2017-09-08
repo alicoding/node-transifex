@@ -1,6 +1,7 @@
 node-transifex
 =====================
 
+[![npm version](https://badge.fury.io/js/transifex.svg)](https://badge.fury.io/js/transifex)
 [![Build Status](https://travis-ci.org/alicoding/node-transifex.png)](https://travis-ci.org/alicoding/node-transifex)
 
 [Transifex](http://www.transifex.com) API client for nodejs
