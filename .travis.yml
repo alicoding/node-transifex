@@ -27,7 +27,6 @@ after_script:
   - >
     [ "${TRAVIS_BRANCH}" != "master" ] &&
     echo "skipping versioning" ||
-    yarn run build &&
     npm version $GIT_TAG -m "Version $GIT_TAG built by Travis CI - https://travis-ci.com/$TRAVIS_REPO_SLUG/builds/$TRAVIS_JOB_ID" &&
     npm publish --tag $NPM_TAG
 
