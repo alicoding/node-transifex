@@ -8,6 +8,7 @@ branches:
 
 env:
   global:
+    - CI_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
     - secure: "Kxy+3yhmNSCtAD5HCVvk/WcII8ULI8QQ/UTdDnhvmLWMCGNAI53JxZ1QNP+n4S6ZynU+SFsu/zWqFVN6+moOhKn/9ZAo1Ia2WWrArgAVU5hT+NyJzyJOrq6hrVgCu4hHdYtiJIV8CJyZnyYqQK0WmXdLemxaPmG/GN6SYjv0Z5k="
 
 after_script:
@@ -28,7 +29,6 @@ after_script:
     echo "skipping versioning" ||
     yarn run build &&
     npm version $GIT_TAG -m "Version $GIT_TAG built by Travis CI - https://travis-ci.com/$TRAVIS_REPO_SLUG/builds/$TRAVIS_JOB_ID" &&
-    git push --tags git@github.com:$TRAVIS_REPO_SLUG.git &&
     npm publish --tag $NPM_TAG
 
 
