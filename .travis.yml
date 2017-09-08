@@ -11,6 +11,9 @@ env:
     - CI_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
     - secure: "Kxy+3yhmNSCtAD5HCVvk/WcII8ULI8QQ/UTdDnhvmLWMCGNAI53JxZ1QNP+n4S6ZynU+SFsu/zWqFVN6+moOhKn/9ZAo1Ia2WWrArgAVU5hT+NyJzyJOrq6hrVgCu4hHdYtiJIV8CJyZnyYqQK0WmXdLemxaPmG/GN6SYjv0Z5k="
 
+before_install:
+  - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
+
 after_script:
   - git config --global user.email "builds@travis-ci.com"
   - git config --global user.name "Travis CI"
