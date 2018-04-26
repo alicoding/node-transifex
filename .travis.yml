@@ -1,6 +1,7 @@
 language: node_js
 node_js:
 - 5.9.1
+- 10
 deploy:
   provider: npm
   email: ali@alicoding.com
