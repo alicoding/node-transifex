@@ -1,6 +1,6 @@
 {
   "name": "transifex",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "NodeJS Transifex API Client",
   "main": "./transifex.js",
   "engines": {
