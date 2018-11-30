@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- 5.9.1
+- 8.9.3
 
 branches:
   only:
@@ -32,5 +32,3 @@ after_script:
     echo "skipping versioning" ||
     npm version $GIT_TAG -m "Version $GIT_TAG built by Travis CI - https://travis-ci.com/$TRAVIS_REPO_SLUG/builds/$TRAVIS_JOB_ID" &&
     npm publish --tag $NPM_TAG
-
-
