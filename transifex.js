@@ -1,4 +1,4 @@
-var request = require("request"),
+const request = require("request"),
     _ = require("lodash"),
     crypto = require('crypto');
 
@@ -501,7 +501,6 @@ Transifex.prototype.translationStringsPutMethod = function(project_slug, resourc
   var url = this.expUrl.translationStringsPutURL.replace("<project_slug>", project_slug)
                                         .replace("<resource_slug>", resource_slug)
                                         .replace("<language_code>", language_code);
-  console.log('url',url);
   this.projectPutRequest(url, content.map(keyToHash), function(err, content) {
     if (err) {
       return callback(err);

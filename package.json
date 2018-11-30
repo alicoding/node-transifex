@@ -3,6 +3,9 @@
   "version": "1.5.0",
   "description": "NodeJS Transifex API Client",
   "main": "./transifex.js",
+  "engines": {
+    "node": ">=8.9.0"
+  },
   "scripts": {
     "test": "mocha --reporter spec tests --timeout 190000 --slow 2000"
   },
