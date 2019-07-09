@@ -31,7 +31,7 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^2.9.0",
-    "lodash": "^4.17.1",
+    "lodash": "^4.17.13",
     "mkpath": "^1.0.0",
     "mocha": "^4.0.0",
     "request": "^2.34.0",
